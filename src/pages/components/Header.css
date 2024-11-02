@@ -1,0 +1,71 @@
+/* Header.css */
+body {
+    margin: 0;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.rpg-header-container {
+    max-width: 1240px; /* 원하는 최대 너비로 조정 */
+    margin: 0 auto; /* 가운데 정렬 */
+    padding: 0 20px; /* 좌우 여백 추가 */
+
+}
+
+.rpg-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10px;
+
+    background-color: #000000; /* 어두운 배경 */
+    border-bottom: 3px solid gold;/* 금색 테두리 */
+}
+
+/* 로고 스타일 */
+.logo img {
+    height: 60px;
+}
+
+/* 네비게이션 스타일 */
+.navbar ul {
+    width: 100%;
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: #e0e0e0;
+    font-size: 14px;
+    font-weight: bold;
+    transition: color 0.5s;
+}
+
+.navbar ul li a:hover {
+    color: gold;
+}
+
+/* 로그인 버튼 스타일 */
+.logout-btn  {
+    background-color: #000000;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: 2px solid gold;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+}
+
+.user-info .logout-btn:hover {
+    background-color: gold;
+    color: #2e2e2e;
+}
