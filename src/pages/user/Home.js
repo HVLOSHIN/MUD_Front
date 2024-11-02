@@ -8,7 +8,6 @@ const Home = () => {
     const { tokenPair} = useAuth();
 
     useEffect(() => {
-        console.log(tokenPair);
         if (tokenPair.accessToken) {
             navigate('/dashboard');
         }

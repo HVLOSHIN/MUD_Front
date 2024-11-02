@@ -51,7 +51,6 @@ export const AuthProvider = ({ children }) => {
         (config) => {
             if (tokenPair.accessToken) {
                 config.headers["Authorization"] = `Bearer ${tokenPair.accessToken}`;
-                console.log("Access Token:", tokenPair.accessToken); // 디버깅용 로그
             }
             return config;
         },

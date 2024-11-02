@@ -37,7 +37,6 @@ const Login = () => {
     const getUserIp = async () => {
         try {
             const response = await axios.get('https://geolocation-db.com/json/');
-             // IPv4 주소를 반환
             return response.data.IPv4;
         } catch (error) {
             console.error('IP 주소를 가져오는 데 실패했습니다:', error);

@@ -12,12 +12,14 @@ const Dashboard = () => {
         axiosInstance.get(`/api/user/${userId}`)
             .then((response) => {
                 setData(response.data);
-                console.log(response.data);
             })
             .catch((error) => {
                 console.error(error);
             });
     }, [axiosInstance]);
+
+    // 현재 직업을 RUNNING 상태인 mastery에서 찾기
+    const currentMastery = data?.mastery.find((job) => job.status === "RUNNING");
 
     return (
         <div className="dashboard-container">
@@ -28,9 +30,24 @@ const Dashboard = () => {
                             {data.username}님, 환영합니다!
                         </h6>
                         <div className="user-stats">
-                            <p>체력: {data.userStats.hp}</p>
-                            <p>행동력: {data.userStats.currentActionPoints} / {data.userStats.maxActionPoints}</p>
-                            <p>현재 직업: {data.mastery[0]?.job.name}</p>
+                            <p>
+                                {data.username} ( {data.userStats.level} )
+                            </p>
+                            <p>
+                                <span style={{color: 'white'}}>{currentMastery.job.name}</span> :
+                                <span style={{color: 'deepskyblue'}}> {currentMastery.jobMasteryEXP} </span> /
+                                <span style={{color: 'white'}}> {currentMastery.job.mastery}</span>
+                            </p>
+                            <p>
+                                행동력 :
+                                <span style={{color: 'orange'}}> {data.userStats.currentActionPoints}</span> /
+                                <span style={{color: 'white'}}> {data.userStats.maxActionPoints}</span>
+                            </p>
+                            <p>
+                                생명력 :
+                                <span style={{color: 'orangered'}}> {data.userStats.hp}</span>
+                            </p>
+
                         </div>
                     </>
                 )}
