@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {useAuth} from "../../context/AuthContext";
 import './Home.css';
 
 const SignUp = () => {
-    const {axiosInstance } = useAuth();
+    const {axiosInstance ,tokenPair} = useAuth();
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [loginId, setLoginId] = useState('');
@@ -16,6 +16,13 @@ const SignUp = () => {
     const isUsernameValid = username.length >= 2 && username.length <= 12;
     const isPasswordValid = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+=-]).{8,16}$/; // 비밀번호 조건
     const doPasswordsMatch = password === confirmPassword;
+
+    useEffect(() => {
+        console.log(tokenPair);
+        if (tokenPair.accessToken) {
+            navigate('/dashboard');
+        }
+    }, [tokenPair.accessToken, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
