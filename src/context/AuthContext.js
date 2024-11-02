@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import Cookies from 'js-cookie';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 
 // AuthContext 생성
 const AuthContext = createContext();
@@ -8,6 +10,8 @@ export const useAuth = () => useContext(AuthContext);
 
 // AuthProvider 컴포넌트
 export const AuthProvider = ({ children }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [tokenPair, setTokenPair] = useState(() => {
         const accessToken = localStorage.getItem("accessToken");
         const refreshToken = localStorage.getItem("refreshToken");
@@ -25,6 +29,16 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
     };
+
+    // 화이트리스트 경로
+    const whitelistPaths = ['/', '/login', '/signup'];
+
+    // 로그인 상태 확인 및 리다이렉트
+    useEffect(() => {
+        if (!tokenPair.accessToken && !whitelistPaths.includes(location.pathname)) {
+            navigate('/'); // 로그인하지 않은 상태로 화이트리스트 외 경로에 접근 시 홈으로 리다이렉트
+        }
+    }, [tokenPair.accessToken, location.pathname, navigate]);
 
     // Axios 인스턴스 설정 및 토큰 추가
     const axiosInstance = axios.create({
@@ -73,10 +87,12 @@ export const AuthProvider = ({ children }) => {
     );
 
     // 로그인 함수
-    const login = async (loginId, password) => {
+    const login = async (loginId, password,rememberMe, ip) => {
         try {
-            const { data } = await axiosInstance.post("/api/user/login", { loginId, password });
+            const { data } = await axiosInstance.post("/api/user/login", { ip, loginId, password });
             updateTokens(data.access_token, data.refresh_token);
+            Cookies.set('userId', data.userId, { expires: 7 });
+
         } catch (error) {
             console.error("로그인 실패:", error);
             throw error; // 에러를 상위로 던져서 처리 가능하게 함
@@ -87,6 +103,8 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         clearTokens();
         delete axiosInstance.defaults.headers.common["Authorization"];
+        Cookies.remove('userId');
+        navigate("/");
     };
 
     return (

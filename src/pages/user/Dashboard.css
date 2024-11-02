@@ -1,0 +1,25 @@
+/* Dashboard.css */
+
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    background-color: #000000;
+    color: #e0e0e0;
+}
+
+/* 메인 콘텐츠 */
+.dashboard-content {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+}
+
+.dashboard-username {
+    color: #ffffff;
+    font-size: 1.3em;
+}
+
+
