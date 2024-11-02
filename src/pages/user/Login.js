@@ -4,19 +4,19 @@ import { useAuth } from '../../context/AuthContext';
 import './Home.css';
 
 const Login = () => {
-    const { login, accessToken } = useAuth();
     const navigate = useNavigate();
     const [loginId, setLoginId] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
+    const { tokenPair, login} = useAuth();
+
     useEffect(() => {
-        // 엑세스 토큰이 존재하면 다른 페이지로 리다이렉트
-        if (accessToken) {
-            alert("왜 여깄노")
-            navigate('/dashboard'); // 대시보드 또는 리다이렉트할 페이지
+        console.log(tokenPair);
+        if (tokenPair.accessToken) {
+            navigate('/dashboard');
         }
-    }, []);
+    }, [tokenPair.accessToken, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -32,7 +32,6 @@ const Login = () => {
     const handleBack = () => {
         navigate(-1);
     };
-
 
     return (
         <div className="gate-container">
