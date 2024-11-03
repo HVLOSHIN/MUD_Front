@@ -2,7 +2,7 @@
 import React from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import './Header.css';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 
 const Header = () => {
