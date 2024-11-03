@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
-import AppRouter from './pages/router/Router';
+import AppRouter from './router/Router';
 import {AuthProvider} from "./context/AuthContext";
 import {BrowserRouter} from "react-router-dom";
-import Header from "./pages/components/Header";
+import Header from "./components/Header";
 
 
 function App() {

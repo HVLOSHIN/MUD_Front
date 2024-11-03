@@ -3,9 +3,12 @@ import './Dashboard.css';
 import { useAuth } from "../../context/AuthContext";
 import Cookies from "js-cookie";
 
+
 const Dashboard = () => {
     const { axiosInstance } = useAuth();
+
     const [data, setData] = useState(null);
+
 
     useEffect(() => {
         const userId = Cookies.get('userId');

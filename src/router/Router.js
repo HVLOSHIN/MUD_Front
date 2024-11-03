@@ -1,10 +1,10 @@
 import React from 'react';
 import {Navigate, Route, Routes} from 'react-router-dom';
-import Hello from "../Hello";
-import Home from "../user/Home";
-import SignUp from "../user/SignUp";
-import Login from "../user/Login";
-import Dashboard from "../user/Dashboard";
+import Hello from "../pages/Hello";
+import Home from "../pages/user/Home";
+import SignUp from "../pages/user/SignUp";
+import Login from "../pages/user/Login";
+import Dashboard from "../pages/user/Dashboard";
 
 
 function AppRouter() {
@@ -16,6 +16,7 @@ function AppRouter() {
             <Route path="/login" element={<Login/>}/>
 
             <Route path="/dashboard" element={<Dashboard/>}/>
+
 
         </Routes>
     )
