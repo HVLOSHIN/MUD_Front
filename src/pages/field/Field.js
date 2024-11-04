@@ -77,15 +77,19 @@ const styles = {
     },
     container: {
         width: '1200px',
+        height: '100vh',
         display: 'flex',
+        backgroundColor: '#030303',
         flexDirection: 'column',
         margin: 'auto',
         alignItems: 'center',
     },
     table: {
-        width: '100%',
+        width: '80%',
         borderCollapse: 'collapse',
         marginTop: '30px',
+
+
     },
     header: {
         backgroundColor: '#363636',
