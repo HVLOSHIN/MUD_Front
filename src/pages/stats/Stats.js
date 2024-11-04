@@ -152,6 +152,10 @@ const Stats = () => {
                         </Tooltip></td>
                         <th>총 사용 HP</th>
                         <td>{calculatedStats.usedHP}</td>
+                        <th>소지금</th>
+                        <td><Tooltip text="gold">
+                            {data.userStats.gold}
+                        </Tooltip></td>
                     </tr>
                     </tbody>
                 </table>

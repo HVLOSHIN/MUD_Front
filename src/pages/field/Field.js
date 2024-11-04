@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from "../../context/AuthContext";
 import Cookies from "js-cookie";
+import { useNavigate } from 'react-router-dom'; // 추가
 
 const Field = () => {
     const [fields, setFields] = useState([]);
     const [usrFields, setUsrFields] = useState([]);
     const { axiosInstance } = useAuth();
+    const navigate = useNavigate(); // 추가
 
     useEffect(() => {
         // 필드 데이터 가져오기
@@ -33,6 +35,11 @@ const Field = () => {
         usrFields.some(usrField => usrField.fieldId === field.id && usrField.fieldStatus === "UNLOCKED")
     );
 
+    // 필드 클릭 시 이동하는 핸들러
+    const handleFieldClick = (fieldId) => {
+        navigate(`/field/${fieldId}`); // 필드 ID에 따라 이동
+    };
+
     return (
         <div style={styles.container}>
             <h2 style={styles.h2}>전장 목록</h2>
@@ -47,9 +54,9 @@ const Field = () => {
                 <tbody>
                 {unlockedFields.length > 0 ? (
                     unlockedFields.map(field => (
-                        <tr key={field.id} style={styles.row}>
+                        <tr key={field.id} style={styles.row} onClick={() => handleFieldClick(field.id)}>
                             <td style={styles.cell}>{field.name}</td>
-                            <td style={styles.cell}>{field.minLevel} </td>
+                            <td style={styles.cell}>{field.minLevel}</td>
                             <td style={styles.cell}>{field.description}</td>
                         </tr>
                     ))
@@ -88,6 +95,7 @@ const styles = {
     },
     row: {
         transition: 'background-color 0.2s',
+        cursor: 'pointer', // 커서 포인터 추가
     },
     cell: {
         padding: '20px',
