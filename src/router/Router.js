@@ -8,6 +8,7 @@ import Dashboard from "../pages/user/Dashboard";
 import Stats from "../pages/stats/Stats";
 import Logout from "../pages/user/Logout";
 import Field from "../pages/field/Field";
+import FieldDetail from "../pages/field/FieldDetail";
 
 
 function AppRouter() {
@@ -23,6 +24,7 @@ function AppRouter() {
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/stats" element={<Stats/>}/>
             <Route path="/field" element={<Field/>}/>
+            <Route path="/field/:fieldId" element={<FieldDetail/>}/>
 
 
         </Routes>
