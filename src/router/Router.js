@@ -9,6 +9,7 @@ import Stats from "../pages/stats/Stats";
 import Logout from "../pages/user/Logout";
 import Field from "../pages/field/Field";
 import FieldDetail from "../pages/field/FieldDetail";
+import Combat from "../pages/combat/Combat";
 
 
 function AppRouter() {
@@ -25,6 +26,7 @@ function AppRouter() {
             <Route path="/stats" element={<Stats/>}/>
             <Route path="/field" element={<Field/>}/>
             <Route path="/field/:fieldId" element={<FieldDetail/>}/>
+            <Route path="/combat" element={<Combat/>}/>
 
 
         </Routes>
