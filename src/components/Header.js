@@ -23,6 +23,10 @@ const Header = () => {
         navigate('/stats');
     }
 
+    function goFields() {
+        navigate('/field');
+    }
+
     return (
         <div className="rpg-header-container">
             <header className="rpg-header">
@@ -40,7 +44,7 @@ const Header = () => {
                         <li><button onClick={goStats}>훈련</button></li>
                         <li><button onClick={goStats}>능력</button></li>
                         <li><button onClick={goStats}>장비</button></li>
-                        <li><button onClick={goStats}>전투</button></li>
+                        <li><button onClick={goFields}>전투</button></li>
                         <li><button onClick={goStats}>마을</button></li>
                         <li><button onClick={goStats}>업적</button></li>
                         <li><button onClick={goStats}>설정</button></li>

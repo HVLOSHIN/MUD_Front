@@ -7,6 +7,7 @@ import Login from "../pages/user/Login";
 import Dashboard from "../pages/user/Dashboard";
 import Stats from "../pages/stats/Stats";
 import Logout from "../pages/user/Logout";
+import Field from "../pages/field/Field";
 
 
 function AppRouter() {
@@ -21,6 +22,7 @@ function AppRouter() {
 
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/stats" element={<Stats/>}/>
+            <Route path="/field" element={<Field/>}/>
 
 
         </Routes>
