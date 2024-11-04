@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext';
 const Header = () => {
     const { logout } = useAuth();
     const location = useLocation();
-    const whitelistPaths = ['/', '/login', '/signup'];
+    const whitelistPaths = ['/', '/login', '/signup', '/logout'];
     const navigate = useNavigate();
 
     if (whitelistPaths.includes(location.pathname)) {

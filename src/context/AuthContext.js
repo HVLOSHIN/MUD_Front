@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedOut(true); // 로그아웃 상태로 변경
     };
 
-    const whitelistPaths = ['/', '/login', '/signup'];
+    const whitelistPaths = ['/', '/login', '/signup', '/logout'];
 
     useEffect(() => {
         if (!tokenPair.accessToken && !whitelistPaths.includes(location.pathname)) {
@@ -113,9 +113,11 @@ export const AuthProvider = ({ children }) => {
         const resetTimer = () => {
             clearTimeout(timeoutId);
             timeoutId = setTimeout(() => {
-                alert("장시간 활동하지 않아 접속을 종료합니다.")
-                logout();
-            }, 20 * 60 * 1000); // 20분
+                clearTokens();
+                delete axiosInstance.defaults.headers.common["Authorization"];
+                Cookies.remove('userId');
+                navigate("/logout");
+            }, 10*60*1000); // 10분
         };
 
         // 사용자의 활동 감지
@@ -127,14 +129,14 @@ export const AuthProvider = ({ children }) => {
 
         window.addEventListener('click', handleActivity);
         window.addEventListener('keydown', handleActivity);
-        window.addEventListener('mousemove', handleActivity);
+        //window.addEventListener('mousemove', handleActivity);
 
         // 컴포넌트 언마운트 시 클린업
         return () => {
             clearTimeout(timeoutId);
             window.removeEventListener('click', handleActivity);
             window.removeEventListener('keydown', handleActivity);
-            window.removeEventListener('mousemove', handleActivity);
+            //window.removeEventListener('mousemove', handleActivity);
         };
     }, [isLoggedOut]);
 

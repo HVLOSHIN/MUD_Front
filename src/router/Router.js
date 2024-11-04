@@ -6,6 +6,7 @@ import SignUp from "../pages/user/SignUp";
 import Login from "../pages/user/Login";
 import Dashboard from "../pages/user/Dashboard";
 import Stats from "../pages/stats/Stats";
+import Logout from "../pages/user/Logout";
 
 
 function AppRouter() {
@@ -15,6 +16,8 @@ function AppRouter() {
             <Route path="/" element={<Home/>}/>
             <Route path="/signup" element={<SignUp/>}/>
             <Route path="/login" element={<Login/>}/>
+            <Route path="/logout" element={<Logout/>}/>
+
 
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/stats" element={<Stats/>}/>
