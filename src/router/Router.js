@@ -5,6 +5,7 @@ import Home from "../pages/user/Home";
 import SignUp from "../pages/user/SignUp";
 import Login from "../pages/user/Login";
 import Dashboard from "../pages/user/Dashboard";
+import Stats from "../pages/stats/Stats";
 
 
 function AppRouter() {
@@ -16,6 +17,7 @@ function AppRouter() {
             <Route path="/login" element={<Login/>}/>
 
             <Route path="/dashboard" element={<Dashboard/>}/>
+            <Route path="/stats" element={<Stats/>}/>
 
 
         </Routes>
