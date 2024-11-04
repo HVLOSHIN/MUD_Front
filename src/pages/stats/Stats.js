@@ -111,6 +111,26 @@ const Stats = () => {
         });
     };
 
+    const gradeColors = {
+        RUBBISH: "#808080",     // 회색
+        COMMON: "#FFFFFF",      // 흰색
+        RARE: "#1E90FF",        // 파란색
+        EPIC: "#9400D3",        // 보라색
+        UNIQUE: "#FFD700",      // 금색
+        LEGENDARY: "#FF4500"    // 주황색
+    };
+
+    const gradeNames = {
+        RUBBISH: "쓰레기",
+        COMMON: "일반",
+        RARE: "희귀",
+        EPIC: "영웅",
+        UNIQUE: "유니크",
+        LEGENDARY: "전설"
+    };
+
+
+
     if (!data) return <div>Loading...</div>;
 
     return (
@@ -305,13 +325,15 @@ const Stats = () => {
                                         <Tooltip
                                             text={
                                                 <span>
-                                            {equippedItem.description}<br/>
-                                            효과: <span
-                                                    dangerouslySetInnerHTML={{__html: formatItemEffects(equippedItem.effects)}}/>
-                                        </span>
-                                            }
-                                        >
-                                            {equippedItem.name}
+                                                    {equippedItem.description}<br/>
+                                                    {gradeNames[equippedItem.grade]}<br/> {/* 한글 등급 이름 */}
+                                                    효과: <span
+                                                    dangerouslySetInnerHTML={{__html: formatItemEffects(equippedItem.effects)}}
+                                                />
+                                                </span>}>
+                                                <span style={{color: gradeColors[equippedItem.grade]}}>
+                                                    {equippedItem.name}
+                                                </span>
                                         </Tooltip>
                                     ) : (
                                         "없음"
