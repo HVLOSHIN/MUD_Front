@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from "../../context/AuthContext";
 import { calculateUserStats, calculateEnemyStats } from '../../utils/statCalculator';
-import CombatTable from './CombatTable'; // CombatTable 컴포넌트를 import
+import CombatTable from './CombatTable';
+import CombatLogic from "./CombatLogic"; // CombatTable 컴포넌트를 import
 
 const Combat = () => {
     const location = useLocation();
@@ -14,33 +15,36 @@ const Combat = () => {
     const { axiosInstance } = useAuth();
 
     useEffect(() => {
-        axiosInstance.get(`/api/user/${userId}`)
-            .then((response) => {
-                setUser(response.data);
-                const calculatedStats = calculateUserStats(response.data);
-                setUserCombat(calculatedStats);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-
-        axiosInstance.get(`/api/enemy/${enemyId}`)
-            .then((response) => {
-                setEnemy(response.data);
-                const calculatedStats = calculateEnemyStats(response.data);
-                setEnemyCombat(calculatedStats);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        const fetchUserAndEnemyData = async () => {
+            try {
+                const [userResponse, enemyResponse] = await Promise.all([
+                    axiosInstance.get(`/api/user/${userId}`),
+                    axiosInstance.get(`/api/enemy/${enemyId}`)
+                ]);
+                setUser(userResponse.data);
+                setEnemy(enemyResponse.data);
+                setUserCombat(calculateUserStats(userResponse.data));
+                setEnemyCombat(calculateEnemyStats(enemyResponse.data));
+                console.log("user" , user, userCombat);
+                console.log("enemy", enemy, userCombat);
+            } catch (error) {
+                console.error('Failed to fetch combat data:', error);
+            }
+        };
+        fetchUserAndEnemyData();
     }, [axiosInstance, userId, enemyId]);
+
 
     return (
         <div className="combat-container">
-        <div style={{display: 'flex', justifyContent: 'space-around', width: '900px', margin: 'auto'}}>
-            {userCombat && <CombatTable title="User Stats" combatData={userCombat}/>}
-            {enemyCombat && <CombatTable title="Enemy Stats" combatData={enemyCombat}/>}
+        <div style={{display: 'flex', justifyContent: 'space-around', width: '700px', margin: 'auto'}}>
+            {userCombat && <CombatTable title={user.username} combatData={userCombat}/>}
+            {enemyCombat && <CombatTable title={enemy.name} combatData={enemyCombat}/>}
         </div>
+            <div>
+            {userCombat && enemyCombat && (
+                <CombatLogic user={user} enemy={enemy} userCombat={userCombat} enemyCombat={enemyCombat}/>)}
+            </div>
         </div>
     );
 };
