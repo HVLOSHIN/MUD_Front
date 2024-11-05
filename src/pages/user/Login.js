@@ -12,7 +12,7 @@ const Login = () => {
     const [error, setError] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
 
-    const { tokenPair, login } = useAuth();
+    const { accessToken, login } = useAuth();
 
     // 쿠키에서 저장된 로그인 정보 불러오기
     useEffect(() => {
@@ -28,10 +28,10 @@ const Login = () => {
     }, []);
 
     useEffect(() => {
-        if (tokenPair.accessToken) {
+        if (accessToken) {
             navigate('/dashboard');
         }
-    }, [tokenPair.accessToken, navigate]);
+    }, [accessToken, navigate]);
 
     // 사용자 IP 주소 가져오기
     const getUserIp = async () => {

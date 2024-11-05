@@ -5,13 +5,13 @@ import './Home.css';
 
 const Home = () => {
     const navigate = useNavigate();
-    const { tokenPair} = useAuth();
+    const { accessToken} = useAuth();
 
     useEffect(() => {
-        if (tokenPair.accessToken) {
+        if (accessToken) {
             navigate('/dashboard');
         }
-    }, [tokenPair.accessToken, navigate]);
+    }, [accessToken, navigate]);
 
 
     const handleLogin = () => {

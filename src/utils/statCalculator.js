@@ -1,5 +1,5 @@
 export const calculateStat = (base, skill, equipment, job) => {
-    return (base * (1 + 0.01 * (skill + equipment + job))).toFixed(1);
+    return (base * (1 + 0.01 * (skill + equipment + job))).toFixed(0);
 };
 
 export const calculateUserStats = (userData) => {
@@ -16,7 +16,7 @@ export const calculateUserStats = (userData) => {
     const CD = calculateStat(baseStats.CD, skillStats.CD, equipmentStats.CD, jobStats.CD);
     const AV = calculateStat(baseStats.AV, skillStats.AV, equipmentStats.AV, jobStats.AV);
     const AR = calculateStat(baseStats.AR, skillStats.AR, equipmentStats.AR, jobStats.AR);
-    const DLY = ((1000 - 50 * Math.pow(userData.userStats.dexterity, 0.3)) * (1 - AR / 100)).toFixed(2);
+    const DLY = ((1000 - 50 * Math.pow(userData.userStats.dexterity, 0.3)) * (1 - AR / 100)).toFixed(0);
 
     return { HP, PA, MA, PD, MD, CT, CD, AV, DLY};
 };

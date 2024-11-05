@@ -9,8 +9,8 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
     const enemyMaxHP = parseInt(enemyCombat.HP);
     const userDLY = parseInt(userCombat.DLY);
     const enemyDLY = parseInt(enemyCombat.DLY);
-    let userCurrentHp = userMaxHP;
-    let enemyCurrentHp = enemyMaxHP;
+    let userCurrentHp = userMaxHP; // 기본 HP 값
+    let enemyCurrentHp = enemyMaxHP; // 기본 HP 값
 
     useEffect(() => {
         if (!userCombat || !enemyCombat) return;
@@ -25,13 +25,15 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
                 const actName = "공격";
                 const baseDamage = userCombat.PA;
                 const damage = Math.floor(Math.random() * (baseDamage * 0.4)) + (baseDamage * 0.8);
-                const finalDamage = Math.max(damage - Math.floor(damage * enemyCombat.PD * 0.01), 0);
+                const finalDamage = Math.max(damage - Math.floor(damage * enemyCombat.PD * 0.01), 1);
                 enemyCurrentHp -= finalDamage;
 
                 combatLog.push({
                     timestamp: userTime,
                     type: 'user',
                     message: `${user.username}의 ${actName} ${finalDamage}의 피해를 입혔다.`,
+                    userDisplay: userCurrentHp,
+                    enemyDisplay: enemyCurrentHp
                 });
                 userTime += userDLY;
             }
@@ -40,13 +42,15 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
                 const actName = "공격";
                 const baseDamage = enemyCombat.PA;
                 const damage = Math.floor(Math.random() * (baseDamage * 0.4)) + (baseDamage * 0.8);
-                const finalDamage = Math.max(damage - Math.floor(damage * userCombat.PD * 0.01), 0);
+                const finalDamage = Math.max(damage - Math.floor(damage * userCombat.PD * 0.01), 1);
                 userCurrentHp -= finalDamage;
 
                 combatLog.push({
                     timestamp: enemyTime,
                     type: 'enemy',
                     message: `${enemy.name}의 ${actName} ${finalDamage}의 피해를 입혔다.`,
+                    userDisplay: userCurrentHp,
+                    enemyDisplay: enemyCurrentHp
                 });
                 enemyTime += enemyDLY;
             }
@@ -72,8 +76,6 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
             }
 
             setLogContainers(chunkedLogContainers);
-            //setUserHp(userCurrentHp);
-            //setEnemyHp(enemyCurrentHp);
         };
 
         calculateCombatLog();
@@ -83,20 +85,20 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
         <div className="combat-log">
             {logContainers.map((chunk, index) => (
                 <div key={index} className="combat-log-container">
-                    <div className="health-status">
-                        <div className="user-health">
-                            {user.username} <br/>
-                            {userCurrentHp} / {userMaxHP}
-                        </div>
-                        <div className="enemy-health">
-                            {enemy.name} <br/>
-                            {enemyCurrentHp} / {enemyMaxHP}
-                            {}
-                        </div>
-                    </div>
-
                     {chunk.map((entry, i) => (
                         <div key={i} className={`log-entry ${entry.type === 'user' ? 'user-log' : 'enemy-log'}`}>
+                            {i === 0 && (
+                                <div className="health-status">
+                                    <div className="user-health">
+                                        {user.username} <br/>
+                                        {entry.userDisplay} / {userMaxHP}
+                                    </div>
+                                    <div className="enemy-health">
+                                        {enemy.name} <br/>
+                                        {entry.enemyDisplay} / {enemyMaxHP}
+                                    </div>
+                                </div>
+                            )}
                             <span className="combat-log-timestamp">{`${(entry.timestamp / 1000).toFixed(1)}s`}</span>
                             <br/>
                             <span>{entry.message}</span>
