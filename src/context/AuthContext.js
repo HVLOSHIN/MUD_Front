@@ -12,34 +12,37 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [tokenPair, setTokenPair] = useState(() => {
-        const accessToken = localStorage.getItem("accessToken");
-        const refreshToken = localStorage.getItem("refreshToken");
-        return { accessToken, refreshToken };
-    });
+    const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
+    const [refreshToken, setRefreshToken] = useState(localStorage.getItem("refreshToken"));
     const [isLoggedOut, setIsLoggedOut] = useState(false); // 로그아웃 상태
+    const whitelistPaths = ['/', '/login', '/signup', '/logout'];
 
-    const updateTokens = (accessToken, refreshToken) => {
-        setTokenPair({ accessToken, refreshToken });
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
+    const updateTokens = (newAccessToken, newRefreshToken) => {
+        if (newAccessToken) {
+            setAccessToken(newAccessToken);
+            localStorage.setItem("accessToken", newAccessToken);
+        }
+        if (newRefreshToken) {
+            setRefreshToken(newRefreshToken);
+            localStorage.setItem("refreshToken", newRefreshToken);
+        }
         setIsLoggedOut(false);
     };
 
     const clearTokens = () => {
-        setTokenPair({ accessToken: null, refreshToken: null });
+        setAccessToken(null);
+        setRefreshToken(null);
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        setIsLoggedOut(true); // 로그아웃 상태로 변경
+        setIsLoggedOut(true);
     };
 
-    const whitelistPaths = ['/', '/login', '/signup', '/logout'];
 
     useEffect(() => {
-        if (!tokenPair.accessToken && !whitelistPaths.includes(location.pathname)) {
-            navigate('/'); // 로그인하지 않은 상태로 화이트리스트 외 경로에 접근 시 홈으로 리다이렉트
+        if (!accessToken && !whitelistPaths.includes(location.pathname)) {
+            navigate('/');
         }
-    }, [tokenPair.accessToken, location.pathname, navigate]);
+    }, [accessToken, location.pathname, navigate]);
 
     // Axios 인스턴스 설정
     const axiosInstance = axios.create({
@@ -50,8 +53,8 @@ export const AuthProvider = ({ children }) => {
     // 요청 인터셉터 설정
     axiosInstance.interceptors.request.use(
         (config) => {
-            if (tokenPair.accessToken) {
-                config.headers["Authorization"] = `Bearer ${tokenPair.accessToken}`;
+            if (accessToken) {
+                config.headers["Authorization"] = `Bearer ${accessToken}`;
             }
             return config;
         },
@@ -63,23 +66,21 @@ export const AuthProvider = ({ children }) => {
         (response) => response,
         async (error) => {
             const originalRequest = error.config;
-
-            // 401 에러 처리
-            if (error.response?.status === 401 && tokenPair.refreshToken && !originalRequest._retry) {
+            if (error.response?.status === 401 && refreshToken && !originalRequest._retry) {
                 originalRequest._retry = true;
                 try {
                     const { data } = await axiosInstance.post("/api/user/refresh", {
-                        refresh_token: tokenPair.refreshToken
+                        refresh_token: refreshToken,
+                        access_token: accessToken,
+                        userId: null
                     });
                     const newAccessToken = data.access_token;
-
-                    // 새 토큰 업데이트
-                    updateTokens(newAccessToken, tokenPair.refreshToken);
+                    updateTokens(newAccessToken, refreshToken);
                     originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
                     return axiosInstance(originalRequest);
                 } catch (err) {
                     console.error("리프레시 토큰 만료:", err);
-                    logout(); // 로그아웃 처리
+                    logout();
                 }
             }
             return Promise.reject(error);
@@ -103,7 +104,7 @@ export const AuthProvider = ({ children }) => {
         clearTokens();
         delete axiosInstance.defaults.headers.common["Authorization"];
         Cookies.remove('userId');
-        navigate("/");
+        navigate("/logout");
     };
 
     // 자동 로그아웃 기능
@@ -141,7 +142,7 @@ export const AuthProvider = ({ children }) => {
     }, [isLoggedOut]);
 
     return (
-        <AuthContext.Provider value={{ tokenPair, login, logout, axiosInstance }}>
+        <AuthContext.Provider value={{ accessToken, login, logout, axiosInstance }}>
             {children}
         </AuthContext.Provider>
     );

@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from "../../context/AuthContext";
 import { useParams } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
-const Field = () => {
+import Cookies from "js-cookie";
+
+const FieldDetail = () => {
     const [enemies, setEnemies] = useState([]);
     const [battleCount, setBattleCount] = useState(1);
     const [selectedEnemy, setSelectedEnemy] = useState(null); // 선택된 적 상태
-
+    const navigate = useNavigate();
     const { fieldId } = useParams();
     const { axiosInstance } = useAuth();
 
     useEffect(() => {
-        axiosInstance.get(`/api/enemy/${fieldId}`)
+        axiosInstance.get(`/api/enemy/field/${fieldId}`)
             .then((response) => {
                 setEnemies(response.data);
             })
@@ -31,7 +34,14 @@ const Field = () => {
             return;
         }
 
-        alert(`전투 ${battleCount}회 시작!`);
+        const userId = Cookies.get('userId');
+        const enemyId = selectedEnemy;
+
+        navigate(`/combat`, {
+            state: { userId, enemyId, battleCount }
+        });
+
+
     };
 
     const handleExplore = () => {
@@ -89,7 +99,8 @@ const styles = {
     },
     title: {
         fontSize: '24px',
-        marginBottom: '20px',
+        marginTop: '20px',
+        marginBottom: '30px',
     },
     enemyList: {
         display: 'flex',
@@ -102,7 +113,7 @@ const styles = {
     enemyItem: {
         borderRadius: '5px',
         padding: '15px',
-        width: '130px',
+        width: '120px',
         textAlign: 'center',
         cursor: 'pointer',
         border: '1px solid #ddd',
@@ -149,4 +160,4 @@ const styles = {
     },
 };
 
-export default Field;
+export default FieldDetail;

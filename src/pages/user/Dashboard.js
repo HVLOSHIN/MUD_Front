@@ -12,6 +12,10 @@ const Dashboard = () => {
 
     useEffect(() => {
         const userId = Cookies.get('userId');
+        if(userId === undefined){
+            return;
+        }
+
         axiosInstance.get(`/api/user/${userId}`)
             .then((response) => {
                 setData(response.data);
