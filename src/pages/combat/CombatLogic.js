@@ -14,6 +14,8 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
     let userCurrentHp = userMaxHP; // 기본 HP 값
     let enemyCurrentHp = enemyMaxHP; // 기본 HP 값
     const TIME = 1000 * 60;
+    let totalDamage = 0;
+    let maxDamage = 0;
 
     const userSkills = user.mastery
         .filter(mastery => (mastery.jobStatus === "RUNNING" || mastery.jobStatus === "MASTER_RUNNING" || mastery.jobStatus === "MASTER") && mastery.activeSkillStatus === "RUNNING")
@@ -48,16 +50,23 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
             .catch(error => console.error('EXP 업데이트 실패 : ', error));
     }
 
+    const updateAchieve = (userId, totalDamage, maxDamage, killCount) => {
+        axiosInstance.put('/api/user/achieve', { userId, totalDamage, maxDamage, killCount })
+            .catch(error => console.error('Achieve 업데이트 실패 : ', error));
+    }
+
     const handleVictory = (enemyCurrentHp) => {
         if (enemyCurrentHp <= 0) {
             setVictoryMessage(`${enemy.name}은(는) 쓰러졌다. \n생명력이 ${(user.userStats.hp + enemy.giveHP)}로 ${enemy.giveHP} 증가했다.`);
             updateHealth(user.userid, user.userStats.hp + enemy.giveHP);
             // TODO ; quantity 구현해야 함
-            updateEXP(user.userid, 1)
+            updateEXP(user.userid, 1);
+            updateAchieve(user.userid, totalDamage, maxDamage, 1);
 
         } else {
             setVictoryMessage(`${user.username}은(는) 쓰러졌다...`);
             updateHealth(user.userid, user.userStats.hp);
+            updateAchieve(user.userid, totalDamage, maxDamage, 0);
         }
     };
 
@@ -102,6 +111,15 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
                 critical = true;
             }
             enemyCurrentHp -= finalDamage;
+
+            // 업적용
+            totalDamage += finalDamage;
+            if(maxDamage < finalDamage){
+                maxDamage = finalDamage;
+            }
+
+
+
             combatLog.push(createCombatLogEntry(userTime, 'user', user.username, actName, finalDamage, userCurrentHp, enemyCurrentHp, critical));
             userTime += userDLY;
         };
