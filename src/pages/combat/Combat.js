@@ -25,8 +25,6 @@ const Combat = () => {
                 setEnemy(enemyResponse.data);
                 setUserCombat(calculateUserStats(userResponse.data));
                 setEnemyCombat(calculateEnemyStats(enemyResponse.data));
-                console.log("user" , user, userCombat);
-                console.log("enemy", enemy, userCombat);
             } catch (error) {
                 console.error('Failed to fetch combat data:', error);
             }

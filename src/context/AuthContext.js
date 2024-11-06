@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
         clearTokens();
         delete axiosInstance.defaults.headers.common["Authorization"];
         Cookies.remove('userId');
-        navigate("/logout");
+        navigate("/");
     };
 
     // 자동 로그아웃 기능
