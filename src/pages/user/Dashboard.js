@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import './Dashboard.css';
 import { useAuth } from "../../context/AuthContext";
+import {UserContext} from "../../context/UserContext";
 import Cookies from "js-cookie";
 
 
 const Dashboard = () => {
     const { axiosInstance } = useAuth();
+    const {currentActionPoints} = useContext(UserContext);
 
     const [data, setData] = useState(null);
 
@@ -47,7 +49,7 @@ const Dashboard = () => {
                             </p>
                             <p>
                                 행동력 :
-                                <span style={{color: 'orange'}}> {data.userStats.currentActionPoints}</span> /
+                                <span style={{color: 'orange'}}> {currentActionPoints}</span> /
                                 <span style={{color: 'white'}}> {data.userStats.maxActionPoints}</span>
                             </p>
                             <p>
