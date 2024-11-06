@@ -9,6 +9,8 @@ const Stats = () => {
     const [data, setData] = useState(null);
     const [calculatedStats, setCalculatedStats] = useState({});
 
+
+
     useEffect(() => {
         const userId = Cookies.get('userId');
         axiosInstance.get(`/api/user/${userId}`)
@@ -25,7 +27,7 @@ const Stats = () => {
             });
     }, [axiosInstance]);
 
-    const currentMastery = data?.mastery.find((job) => job.status === "RUNNING");
+    const currentMastery = data?.mastery.find((job) => job.jobStatus === "RUNNING");
 
     const findEquippedItem = (slots) => {
         for (const slot of slots) {

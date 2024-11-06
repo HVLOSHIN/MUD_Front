@@ -4,7 +4,7 @@ import {useAuth} from "../../context/AuthContext";
 import './Home.css';
 
 const SignUp = () => {
-    const {axiosInstance ,tokenPair} = useAuth();
+    const {axiosInstance ,accessToken} = useAuth();
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [loginId, setLoginId] = useState('');
@@ -18,11 +18,10 @@ const SignUp = () => {
     const doPasswordsMatch = password === confirmPassword;
 
     useEffect(() => {
-        console.log(tokenPair);
-        if (tokenPair.accessToken) {
+        if (accessToken) {
             navigate('/dashboard');
         }
-    }, [tokenPair.accessToken, navigate]);
+    }, [accessToken, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

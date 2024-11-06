@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './Combat.css';
+import { useAuth } from "../../context/AuthContext";
 
 const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
     const [logContainers, setLogContainers] = useState([]);
     const [victoryMessage, setVictoryMessage] = useState('');
+    const { axiosInstance } = useAuth();
 
     const userMaxHP = parseInt(userCombat.HP);
     const enemyMaxHP = parseInt(enemyCombat.HP);
@@ -11,73 +13,133 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
     const enemyDLY = parseInt(enemyCombat.DLY);
     let userCurrentHp = userMaxHP; // 기본 HP 값
     let enemyCurrentHp = enemyMaxHP; // 기본 HP 값
+    const TIME = 1000 * 60;
 
-    useEffect(() => {
-        if (!userCombat || !enemyCombat) return;
+    const userSkills = user.mastery
+        .filter(mastery => mastery.activeSkillStatus === "RUNNING")
+        .flatMap(mastery => mastery.job.activeSkills)
+        .sort((a, b) => b.priority - a.priority);
 
-        const calculateCombatLog = () => {
-            const combatLog = [];
+    const calculateDamage = (base, defense, isMA) => {
+        const rawDamage = Math.floor(Math.random() * (base * 0.4)) + (base * 0.8);
+        const defenseValue = isMA ? defense.MD : defense.PD;
+        return rawDamage - rawDamage * defenseValue * 0.01;
+    };
 
-            let userTime = userDLY;
-            let enemyTime = enemyDLY;
+    const createCombatLogEntry = (timestamp, type, name, actName, finalDamage, userDisplay, enemyDisplay, isCritical = false) => ({
+        timestamp,
+        type,
+        name,
+        actName,
+        finalDamage,
+        userDisplay,
+        enemyDisplay,
+        isCritical
+    });
 
-            const userTurn = () => {
-                const actName = "공격";
-                const baseDamage = userCombat.PA;
-                const damage = Math.floor(Math.random() * (baseDamage * 0.4)) + (baseDamage * 0.8);
-                const finalDamage = Math.max(damage - Math.floor(damage * enemyCombat.PD * 0.01), 1);
-                enemyCurrentHp -= finalDamage;
+    const updateHealth = (userId, newHp) => {
+        axiosInstance.put('/api/user/hp', { userId, newHp })
+            .catch(error => console.error('HP 업데이트 실패 : ', error));
+    };
 
-                combatLog.push({
-                    timestamp: userTime,
-                    type: 'user',
-                    message: `${user.username}의 ${actName} ${finalDamage}의 피해를 입혔다.`,
-                    userDisplay: userCurrentHp,
-                    enemyDisplay: enemyCurrentHp
-                });
-                userTime += userDLY;
-            }
+    const updateEXP = (userId, quantity) => {
+        axiosInstance.put('/api/user/exp', { userId, quantity })
+            .catch(error => console.error('EXP 업데이트 실패 : ', error));
+    }
 
-            const enemyTurn = () => {
-                const actName = "공격";
-                const baseDamage = enemyCombat.PA;
-                const damage = Math.floor(Math.random() * (baseDamage * 0.4)) + (baseDamage * 0.8);
-                const finalDamage = Math.max(damage - Math.floor(damage * userCombat.PD * 0.01), 1);
-                userCurrentHp -= finalDamage;
+    const handleVictory = (enemyCurrentHp) => {
+        if (enemyCurrentHp <= 0) {
+            setVictoryMessage(`${enemy.name}은(는) 쓰러졌다. \n생명력이 ${(user.userStats.hp + enemy.giveHP)}로 ${enemy.giveHP} 증가했다.`);
+            updateHealth(user.userid, user.userStats.hp + enemy.giveHP);
+        } else {
+            setVictoryMessage(`${user.username}은(는) 쓰러졌다...`);
+            updateHealth(user.userid, user.userStats.hp);
+        }
+    };
 
-                combatLog.push({
-                    timestamp: enemyTime,
-                    type: 'enemy',
-                    message: `${enemy.name}의 ${actName} ${finalDamage}의 피해를 입혔다.`,
-                    userDisplay: userCurrentHp,
-                    enemyDisplay: enemyCurrentHp
-                });
-                enemyTime += enemyDLY;
-            }
+    const handleTimeOut = () => {
+        setVictoryMessage(`시간 초과 \n  ${enemy.name}에게 패배했다...`);
+        updateHealth(user.userid, user.userStats.hp);
+    };
 
-            while (userCurrentHp > 0 && enemyCurrentHp > 0) {
-                if (userTime <= enemyTime) {
-                    userTurn();
-                } else {
-                    enemyTurn();
+    const calculateCombatLog = () => {
+        const combatLog = [];
+        let userTime = userDLY;
+        let enemyTime = enemyDLY;
+
+        const userTurn = () => {
+            let actName;
+            let baseDamage;
+            let finalDamage;
+            let skillActivated = false;
+            let critical = false;
+
+            for (const skill of userSkills) {
+                if (Math.random() * 100 < skill.chance) {
+                    actName = skill.name;
+                    const effect = skill.effects.find(effect => effect.effectType === 'PA' || effect.effectType === 'MA');
+                    if (effect) {
+                        const isMA = effect.effectType === 'MA';
+                        baseDamage = isMA ? userCombat.MA * effect.value : userCombat.PA * effect.value;
+                        finalDamage = Math.floor(calculateDamage(baseDamage, enemyCombat, isMA));
+                        skillActivated = true;
+                        break;
+                    }
                 }
             }
 
-            if (enemyCurrentHp <= 0) {
-                setVictoryMessage('유저 승리!');
-            } else {
-                setVictoryMessage('적 승리!');
+            if (!skillActivated) {
+                actName = "공격";
+                baseDamage = userCombat.PA;
+                finalDamage = Math.floor(calculateDamage(baseDamage, enemyCombat, false));
             }
 
-            // 10개씩 끊어서 컨테이너로 나눔
-            const chunkedLogContainers = [];
-            for (let i = 0; i < combatLog.length; i += 10) {
-                chunkedLogContainers.push(combatLog.slice(i, i + 10));
+            if (Math.random() * 100 < userCombat.CT) {
+                finalDamage = Math.floor(finalDamage + (finalDamage * userCombat.CD * 0.01));
+                critical = true;
             }
 
-            setLogContainers(chunkedLogContainers);
+            enemyCurrentHp -= finalDamage;
+            combatLog.push(createCombatLogEntry(userTime, 'user', user.username, actName, finalDamage, userCurrentHp, enemyCurrentHp, critical));
+            userTime += userDLY;
         };
 
+        const enemyTurn = () => {
+            const actName = "공격";
+            const baseDamage = enemyCombat.PA;
+            const damage = Math.floor(Math.random() * (baseDamage * 0.4)) + (baseDamage * 0.8);
+            const finalDamage = Math.max(damage - Math.floor(damage * userCombat.PD * 0.01), 1);
+            userCurrentHp -= finalDamage;
+
+            combatLog.push(createCombatLogEntry(enemyTime, 'enemy', enemy.name, actName, finalDamage, userCurrentHp, enemyCurrentHp));
+            enemyTime += enemyDLY;
+        };
+
+        while (userCurrentHp > 0 && enemyCurrentHp > 0) {
+            if (userTime > TIME || enemyTime > TIME) break;
+            if (userTime <= enemyTime) {
+                userTurn();
+            } else {
+                enemyTurn();
+            }
+        }
+
+        if (userTime > TIME || enemyTime > TIME) {
+            handleTimeOut();
+        } else {
+            handleVictory(enemyCurrentHp);
+        }
+
+        const chunkedLogContainers = [];
+        for (let i = 0; i < combatLog.length; i += 10) {
+            chunkedLogContainers.push(combatLog.slice(i, i + 10));
+        }
+
+        setLogContainers(chunkedLogContainers);
+    };
+
+    useEffect(() => {
+        if (!userCombat || !enemyCombat) return;
         calculateCombatLog();
     }, [userCombat, enemyCombat]);
 
@@ -90,24 +152,30 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
                             {i === 0 && (
                                 <div className="health-status">
                                     <div className="user-health">
-                                        {user.username} <br/>
+                                        {entry.user} <br />
                                         {entry.userDisplay} / {userMaxHP}
                                     </div>
                                     <div className="enemy-health">
-                                        {enemy.name} <br/>
+                                        {enemy.name} <br />
                                         {entry.enemyDisplay} / {enemyMaxHP}
                                     </div>
                                 </div>
                             )}
                             <span className="combat-log-timestamp">{`${(entry.timestamp / 1000).toFixed(1)}s`}</span>
-                            <br/>
-                            <span>{entry.message}</span>
+                            <br />
+                            <span>
+                                <span className="name">{entry.name}의 </span>
+                                <span className="act-name">{entry.actName}! </span>
+                                <span className={entry.isCritical ? 'critical-damage' : ''}>
+                                    {entry.finalDamage}의 피해를 입혔다.
+                                </span>
+                            </span>
                         </div>
                     ))}
                 </div>
             ))}
             <div className="victory-message">
-                {victoryMessage}
+                {victoryMessage} <br />
             </div>
         </div>
     );
