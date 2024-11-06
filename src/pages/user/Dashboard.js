@@ -26,7 +26,7 @@ const Dashboard = () => {
     }, [axiosInstance]);
 
     // 현재 직업을 RUNNING 상태인 mastery에서 찾기
-    const currentMastery = data?.mastery.find((job) => job.jobStatus === "RUNNING");
+    const currentMastery = data?.mastery.find((job) => job.jobStatus === "RUNNING" || "MASTER_RUNNING");
 
     return (
         <div className="dashboard-container">

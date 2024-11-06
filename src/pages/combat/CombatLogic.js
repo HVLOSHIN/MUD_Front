@@ -16,7 +16,7 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
     const TIME = 1000 * 60;
 
     const userSkills = user.mastery
-        .filter(mastery => mastery.activeSkillStatus === "RUNNING")
+        .filter(mastery => mastery.activeSkillStatus === "RUNNING" || "MASTER")
         .flatMap(mastery => mastery.job.activeSkills)
         .sort((a, b) => b.priority - a.priority);
 
@@ -51,6 +51,8 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
         if (enemyCurrentHp <= 0) {
             setVictoryMessage(`${enemy.name}은(는) 쓰러졌다. \n생명력이 ${(user.userStats.hp + enemy.giveHP)}로 ${enemy.giveHP} 증가했다.`);
             updateHealth(user.userid, user.userStats.hp + enemy.giveHP);
+            // TODO ; quantity 구현해야 함
+            updateEXP(user.userid, 1)
         } else {
             setVictoryMessage(`${user.username}은(는) 쓰러졌다...`);
             updateHealth(user.userid, user.userStats.hp);
@@ -87,18 +89,16 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
                     }
                 }
             }
-
             if (!skillActivated) {
                 actName = "공격";
                 baseDamage = userCombat.PA;
                 finalDamage = Math.floor(calculateDamage(baseDamage, enemyCombat, false));
             }
-
+            // 크리티컬
             if (Math.random() * 100 < userCombat.CT) {
                 finalDamage = Math.floor(finalDamage + (finalDamage * userCombat.CD * 0.01));
                 critical = true;
             }
-
             enemyCurrentHp -= finalDamage;
             combatLog.push(createCombatLogEntry(userTime, 'user', user.username, actName, finalDamage, userCurrentHp, enemyCurrentHp, critical));
             userTime += userDLY;

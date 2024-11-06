@@ -27,7 +27,7 @@ const Stats = () => {
             });
     }, [axiosInstance]);
 
-    const currentMastery = data?.mastery.find((job) => job.jobStatus === "RUNNING");
+    const currentMastery = data?.mastery.find((job) => job.jobStatus === "RUNNING" || "MASTER_RUNNING");
 
     const findEquippedItem = (slots) => {
         for (const slot of slots) {
