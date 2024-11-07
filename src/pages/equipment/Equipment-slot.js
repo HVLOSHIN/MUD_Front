@@ -1,10 +1,11 @@
-// EquipmentSlot.js
 import React from 'react';
 import './Equipment.css';
 import Tooltip from '../../components/Tooltip';
 import {gradeColors, GRADE_NAMES, slotNames} from '../../utils/EquipUtils';
+import {useEquipment} from "../../context/EquipmentContext";
 
-const EquipmentSlot = ({equipment, equippedItems, toggleItemEquipStatus, unequipItem}) => {
+const EquipmentSlot = ({toggleItemEquipStatus, unequipItem}) => {
+    const { equipment, equippedItems } = useEquipment();
 
     const getGradeColor = (grade) => gradeColors[grade] || "#FFFFFF";
 
@@ -75,7 +76,7 @@ const EquipmentSlot = ({equipment, equippedItems, toggleItemEquipStatus, unequip
                                 </button>
                             </>
                         ) : (
-                            <span className="item-name">미장착</span>
+                            <span className="item-name"></span>
                         )}
                     </div>
                 ))}

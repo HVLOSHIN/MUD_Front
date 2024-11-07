@@ -5,6 +5,7 @@ import {AuthProvider} from "./context/AuthContext";
 import {BrowserRouter} from "react-router-dom";
 import Header from "./components/Header";
 import {UserProvider} from "./context/UserContext";
+import {EquipmentProvider} from "./context/EquipmentContext";
 
 
 function App() {
@@ -13,10 +14,12 @@ function App() {
             <BrowserRouter>
                 <AuthProvider>
                     <UserProvider>
-                    <Header/>
-                    <div className="Content">
-                        <AppRouter/>
-                    </div>
+                        <EquipmentProvider>
+                            <Header/>
+                            <div className="Content">
+                                <AppRouter/>
+                             </div>
+                        </EquipmentProvider>
                     </UserProvider>
                 </AuthProvider>
             </BrowserRouter>

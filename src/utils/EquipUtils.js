@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 export const gradeColors = {
     RUBBISH: "#808080",
     COMMON: "#FFFFFF",
