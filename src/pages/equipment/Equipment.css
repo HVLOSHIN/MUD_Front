@@ -7,6 +7,18 @@
     /*border: 1px solid #ccc;*/
     padding: 20px;
     display: flex;
+
+}
+.equipment-stats-summary{
+    width: 1200px;
+    min-width: 1200px;
+    background-color: #000000; /* 다크 모드 배경색 */
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+
 }
 
 .owned-equipment-container {

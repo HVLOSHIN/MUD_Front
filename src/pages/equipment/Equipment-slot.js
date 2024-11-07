@@ -2,37 +2,9 @@
 import React from 'react';
 import './Equipment.css';
 import Tooltip from '../../components/Tooltip';
+import {gradeColors, GRADE_NAMES, slotNames} from '../../utils/EquipUtils';
 
 const EquipmentSlot = ({equipment, equippedItems, toggleItemEquipStatus, unequipItem}) => {
-    const gradeColors = {
-        RUBBISH: "#808080",
-        COMMON: "#FFFFFF",
-        RARE: "#1E90FF",
-        EPIC: "#9400D3",
-        UNIQUE: "#FFD700",
-        LEGENDARY: "#FF4500"
-    };
-    const GRADE_NAMES = {
-        RUBBISH: "쓰레기",
-        COMMON: "일반",
-        RARE: "희귀",
-        EPIC: "영웅",
-        UNIQUE: "유니크",
-        LEGENDARY: "전설"
-    };
-
-    const slotNames = {
-        "TWO_HANDED_WEAPON": "양손 무기",
-        "ONE_HANDED_WEAPON": "한손 무기",
-        "OFFHAND_WEAPON": "보조",
-        "HEAD": "머리",
-        "BODY": "갑옷",
-        "GLOVES": "장갑",
-        "BOOTS": "신발",
-        "NECKLACE": "목걸이",
-        "RING": "반지",
-        "BRACELET": "팔찌"
-    };
 
     const getGradeColor = (grade) => gradeColors[grade] || "#FFFFFF";
 
@@ -84,18 +56,19 @@ const EquipmentSlot = ({equipment, equippedItems, toggleItemEquipStatus, unequip
                                 <Tooltip
                                     text={
                                         <span>
-                                            {equippedItems[slot].description}<br/>
+                                        {equippedItems[slot].description}<br/>
                                             {GRADE_NAMES[equippedItems[slot].grade]}<br/> {/* 한글 등급 이름 */}
-                                            효과: <span
+                                            효과:
+                                        <span
                                             dangerouslySetInnerHTML={{__html: formatItemEffects(equippedItems[slot].effects)}}/>
-                                                </span>}>
-                                                <span style={{color: gradeColors[equippedItems[slot].grade]}}>
-                                <span className="item-name" style={{color: getGradeColor(equippedItems[slot].grade)}}>
-                                    {equippedItems[slot].name}
-                                </span>
-                                                </span>
+                                    </span>}>
+                                    <span style={{color: gradeColors[equippedItems[slot].grade]}}>
+                                        <span className="item-name"
+                                              style={{color: getGradeColor(equippedItems[slot].grade)}}>
+                                            {equippedItems[slot].name}
+                                        </span>
+                                    </span>
                                 </Tooltip>
-
 
                                 <button className="equip-button"
                                         onClick={() => handleEquipToggle(equippedItems[slot])}>탈착
@@ -121,13 +94,13 @@ const EquipmentSlot = ({equipment, equippedItems, toggleItemEquipStatus, unequip
                                             {GRADE_NAMES[item.grade]}<br/> {/* 한글 등급 이름 */}
                                             효과: <span
                                             dangerouslySetInnerHTML={{__html: formatItemEffects(item.effects)}}/>
-                                                </span>}>
-                                                <span style={{color: gradeColors[item.grade]}}>
-                                                    <span className="item-name"
-                                                          style={{color: getGradeColor(item.grade)}}>
-                                                    {item.name}
-                                                    </span>
-                                                </span>
+                                        </span>}>
+                                        <span style={{color: gradeColors[item.grade]}}>
+                                            <span className="item-name"
+                                                  style={{color: getGradeColor(item.grade)}}>
+                                                {item.name}
+                                            </span>
+                                        </span>
                                 </Tooltip>
                                 <button className="equip-button" onClick={() => handleEquipToggle(item)}>
                                     장착

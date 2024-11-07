@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './Stats.css';
 import {useAuth} from "../../context/AuthContext";
+import {gradeColors, GRADE_NAMES, slotNames} from '../../utils/EquipUtils';
 import Cookies from "js-cookie";
 import Tooltip from '../../components/Tooltip';
 
@@ -8,8 +9,6 @@ const Stats = () => {
     const {axiosInstance} = useAuth();
     const [data, setData] = useState(null);
     const [calculatedStats, setCalculatedStats] = useState({});
-
-
 
     useEffect(() => {
         const userId = Cookies.get('userId');
@@ -112,26 +111,6 @@ const Stats = () => {
             finalAR, baseAR, additionalAR, DLY, baseDLY, gapDLY,
         });
     };
-
-    const gradeColors = {
-        RUBBISH: "#808080",     // 회색
-        COMMON: "#FFFFFF",      // 흰색
-        RARE: "#1E90FF",        // 파란색
-        EPIC: "#9400D3",        // 보라색
-        UNIQUE: "#FFD700",      // 금색
-        LEGENDARY: "#FF4500"    // 주황색
-    };
-
-    const gradeNames = {
-        RUBBISH: "쓰레기",
-        COMMON: "일반",
-        RARE: "희귀",
-        EPIC: "영웅",
-        UNIQUE: "유니크",
-        LEGENDARY: "전설"
-    };
-
-
 
     if (!data) return <div>Loading...</div>;
 
@@ -313,7 +292,7 @@ const Stats = () => {
                     <tbody>
                     {[
                         {label: "무기", slots: ["TWO_HANDED_WEAPON", "ONE_HANDED_WEAPON"]},
-                        {label: "보조", slots: ["OFFHANDED_WEAPON"]},
+                        {label: "보조", slots: ["OFFHAND_WEAPON"]},
                         {label: "머리", slots: ["HEAD"]},
                         {label: "몸통", slots: ["ARMOR"]},
                         {label: "장갑", slots: ["GLOVES"]},
@@ -332,7 +311,7 @@ const Stats = () => {
                                             text={
                                                 <span>
                                                     {equippedItem.description}<br/>
-                                                    {gradeNames[equippedItem.grade]}<br/> {/* 한글 등급 이름 */}
+                                                    {GRADE_NAMES[equippedItem.grade]}<br/> {/* 한글 등급 이름 */}
                                                     효과: <span
                                                     dangerouslySetInnerHTML={{__html: formatItemEffects(equippedItem.effects)}}
                                                 />
