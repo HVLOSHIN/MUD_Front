@@ -2,9 +2,9 @@
     width: 1200px;
     min-width: 1200px;
     min-height: 100vh;
-    background-color: #121212; /* 다크 모드 배경색 */
+    background-color: #000000; /* 다크 모드 배경색 */
     margin: 0 auto;
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     padding: 20px;
     display: flex;
 }
@@ -12,7 +12,7 @@
 .owned-equipment-container {
     width: 50%;
     padding: 20px;
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     border-radius: 10px;
     color: #fff;
 }
@@ -20,7 +20,7 @@
 .equipment-slot-container {
     width: 50%;
     padding: 20px;
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     border-radius: 10px;
     color: #fff;
 }
@@ -50,6 +50,18 @@
     margin-left: 40px;
     border-radius: 5px;
     color: #fff;
+}
+
+.equip-button{
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+}
+.equip-button:hover {
+    color: gold;
 }
 
 .item-name {
