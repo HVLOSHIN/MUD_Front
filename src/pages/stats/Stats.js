@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './Stats.css';
 import {useAuth} from "../../context/AuthContext";
 import Cookies from "js-cookie";
-import Tooltip from './Tooltip';
+import Tooltip from '../../components/Tooltip';
 
 const Stats = () => {
     const {axiosInstance} = useAuth();
