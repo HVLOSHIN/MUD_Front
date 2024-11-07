@@ -6,6 +6,10 @@ export const calculateStat2 = (base, skill, equipment, job) => {
     return (base + skill + equipment + job).toFixed(0);
 };
 
+export const additionalCalculateStat = (skill, equipment, job) => {
+    return (skill + equipment + job).toFixed(0);
+};
+
 export const calculateUserStats = (userData) => {
     if (!userData) return {};
 
@@ -22,8 +26,20 @@ export const calculateUserStats = (userData) => {
     const AR = calculateStat2(baseStats.AR, skillStats.AR, equipmentStats.AR, jobStats.AR);
     const DLY = ((1000 - 50 * Math.pow(userData.userStats.dexterity, 0.3)) * (1 - AR / 100)).toFixed(0);
 
-    return { HP, PA, MA, PD, MD, CT, CD, AV, DLY};
+    const effectHP = additionalCalculateStat(skillStats.HP, equipmentStats.HP, jobStats.HP);
+    const effectPA = additionalCalculateStat(skillStats.PA, equipmentStats.PA, jobStats.PA);
+    const effectMA = additionalCalculateStat(skillStats.MA, equipmentStats.MA, jobStats.MA);
+    const effectPD = additionalCalculateStat(skillStats.PD, equipmentStats.PD, jobStats.PD);
+    const effectMD = additionalCalculateStat(skillStats.MD, equipmentStats.MD, jobStats.MD);
+    const effectCT = additionalCalculateStat(skillStats.CT, equipmentStats.CT, jobStats.CT);
+    const effectCD = additionalCalculateStat(skillStats.CD, equipmentStats.CD, jobStats.CD);
+    const effectAV = additionalCalculateStat(skillStats.AV, equipmentStats.AV, jobStats.AV);
+    const effectAR = additionalCalculateStat(skillStats.AR, equipmentStats.AR, jobStats.AR);
+    const baseDLY = ((1000 - 50 * Math.pow(userData.userStats.dexterity, 0.3))).toFixed(0);
+
+    return { HP, PA, MA, PD, MD, CT, CD, AV, AR, DLY, effectHP, effectPA, effectMA, effectPD, effectMD, effectCT, effectCD, effectAV, effectAR,baseDLY};
 };
+
 
 export const calculateEnemyStats = (enemyData) => {
     if (!enemyData) return {};

@@ -13,7 +13,7 @@ export const EquipmentProvider = ({ children }) => {
     const { axiosInstance } = useAuth();
     const [equipment, setEquipment] = useState([]);
     const [equippedItems, setEquippedItems] = useState({});
-    const [totalEffects, setTotalEffects] = useState({});
+    const [equipTotalEffects, setEquipTotalEffects] = useState({});
     const whitelistPaths = ['/stats', '/equipment', '/combat'];
     const location = useLocation();
 
@@ -35,7 +35,6 @@ export const EquipmentProvider = ({ children }) => {
             .catch((error) => console.error('장비를 불러오는 데 실패했습니다:', error));
     }, [axiosInstance, location.pathname]);
 
-    // 장착된 아이템에 변화가 있을 때마다 totalEffects를 계산
     useEffect(() => {
         const newTotalEffects = Object.values(equippedItems).reduce((acc, item) => {
             // item이 존재하고 item.effects가 배열인 경우만 처리
@@ -48,11 +47,54 @@ export const EquipmentProvider = ({ children }) => {
             return acc;
         }, {});
 
-        setTotalEffects(newTotalEffects);
-    }, [equippedItems]);
+        setEquipTotalEffects(newTotalEffects);
+    }, [equippedItems, location.pathname, equippedItems]);
+
+    const gradeColors = {
+        RUBBISH: "#949494",
+        COMMON: "#FFFFFF",
+        RARE: "#5eacff",
+        EPIC: "#d171ff",
+        UNIQUE: "#FFD700",
+        LEGENDARY: "#FF4500"
+    };
+
+    const GRADE_NAMES = {
+        RUBBISH: "쓰레기",
+        COMMON: "일반",
+        RARE: "희귀",
+        EPIC: "영웅",
+        UNIQUE: "유니크",
+        LEGENDARY: "전설"
+    };
+
+    const slotNames = {
+        "TWO_HANDED_WEAPON": "양손 무기",
+        "ONE_HANDED_WEAPON": "한손 무기",
+        "OFFHAND_WEAPON": "보조",
+        "HEAD": "머리",
+        "BODY": "갑옷",
+        "GLOVES": "장갑",
+        "BOOTS": "신발",
+        "NECKLACE": "목걸이",
+        "RING": "반지",
+        "BRACELET": "팔찌"
+    };
+
+    const slotGroups = {
+        "무기": ["ONE_HANDED_WEAPON", "TWO_HANDED_WEAPON"],
+        "보조": ["OFFHAND_WEAPON"],
+        "머리": ["HEAD"],
+        "몸통": ["BODY"],
+        "장갑": ["GLOVES"],
+        "신발": ["BOOTS"],
+        "목걸이": ["NECKLACE"],
+        "반지": ["RING"],
+        "팔찌": ["BRACELET"]
+    };
 
     return (
-        <EquipmentContext.Provider value={{ equipment, equippedItems, totalEffects, setEquipment, setEquippedItems }}>
+        <EquipmentContext.Provider value={{ equipment, equippedItems, equipTotalEffects, setEquipment, setEquippedItems, gradeColors, GRADE_NAMES, slotNames, slotGroups }}>
             {children}
         </EquipmentContext.Provider>
     );

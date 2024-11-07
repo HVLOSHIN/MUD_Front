@@ -1,11 +1,10 @@
 import React from 'react';
 import './Equipment.css';
 import Tooltip from '../../components/Tooltip';
-import {gradeColors, GRADE_NAMES, slotNames} from '../../utils/EquipUtils';
 import {useEquipment} from "../../context/EquipmentContext";
 
 const EquipmentSlot = ({toggleItemEquipStatus, unequipItem}) => {
-    const { equipment, equippedItems } = useEquipment();
+    const { equipment, equippedItems, gradeColors, GRADE_NAMES, slotNames } = useEquipment();
 
     const getGradeColor = (grade) => gradeColors[grade] || "#FFFFFF";
 
