@@ -7,8 +7,8 @@ body {
 
 .rpg-header-container {
     max-width: 1240px; /* 원하는 최대 너비로 조정 */
+    min-width: 1200px;
     margin: 0 auto; /* 가운데 정렬 */
-    padding: 0 20px; /* 좌우 여백 추가 */
 
 }
 
