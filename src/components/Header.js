@@ -27,6 +27,14 @@ const Header = () => {
         navigate('/field');
     }
 
+    function goTraining() {
+        navigate('/training');
+    }
+
+    function goEquipment() {
+        navigate('/equipment');
+    }
+
     return (
         <div className="rpg-header-container">
             <header className="rpg-header">
@@ -41,9 +49,9 @@ const Header = () => {
                 <ul>
 
                         <li><button onClick={goStats}>상세</button></li>
-                        <li><button onClick={goStats}>훈련</button></li>
+                        <li><button onClick={goTraining}>훈련</button></li>
                         <li><button onClick={goStats}>능력</button></li>
-                        <li><button onClick={goStats}>장비</button></li>
+                        <li><button onClick={goEquipment}>장비</button></li>
                         <li><button onClick={goFields}>전투</button></li>
                         <li><button onClick={goStats}>마을</button></li>
                         <li><button onClick={goStats}>업적</button></li>

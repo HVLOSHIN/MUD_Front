@@ -91,9 +91,11 @@ const FieldDetail = () => {
 
 const styles = {
     container: {
-        width: '1240px',
+        width: '1200px',
+        minWidth: '1200px',
         height: '100vh',
         margin: 'auto',
+        padding: '20px',
         backgroundColor: '#030303',
         textAlign: 'center',
     },

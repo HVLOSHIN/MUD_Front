@@ -1,0 +1,110 @@
+.equipment-container {
+    width: 1200px;
+    min-width: 1200px;
+    min-height: 100vh;
+    background-color: #000000; /* 다크 모드 배경색 */
+    margin: 0 auto;
+    /*border: 1px solid #ccc;*/
+    padding: 20px;
+    display: flex;
+
+}
+.equipment-stats-summary{
+    width: 1200px;
+    min-width: 1200px;
+    background-color: #000000; /* 다크 모드 배경색 */
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+
+}
+
+.owned-equipment-container {
+    width: 50%;
+    padding: 20px;
+    /*border: 1px solid #ccc;*/
+    border-radius: 10px;
+    color: #fff;
+}
+
+.equipment-slot-container {
+    width: 50%;
+    padding: 20px;
+    /*border: 1px solid #ccc;*/
+    border-radius: 10px;
+    color: #fff;
+}
+
+.equipment-slot {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px;
+}
+
+.equipment-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.equipment-item {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    border: 2px solid #ccc;
+    margin-bottom: 10px;
+    margin-left: 40px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.equip-button{
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+}
+.equip-button:hover {
+    color: gold;
+}
+
+.item-name {
+    font-weight: bold;
+}
+
+.slot-name {
+    font-weight: bold;
+}
+
+.item-stat {
+    margin-left: 10px;
+}
+
+/* 장비 등급별 스타일 */
+.legendary {
+    background-color: #ffcc00;
+    color: #000;
+}
+
+.epic {
+    background-color: #800080;
+    color: #fff;
+}
+
+.rare {
+    background-color: #0066ff;
+    color: #fff;
+}
+
+.common {
+    background-color: #bfbfbf;
+    color: #333;
+}

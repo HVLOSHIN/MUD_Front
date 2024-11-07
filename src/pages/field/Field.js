@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from "../../context/AuthContext";
 import Cookies from "js-cookie";
-import { useNavigate } from 'react-router-dom'; // 추가
+import { useNavigate } from 'react-router-dom';
+import {hover} from "@testing-library/user-event/dist/hover"; // 추가
 
 const Field = () => {
     const [fields, setFields] = useState([]);
@@ -77,6 +78,7 @@ const styles = {
     },
     container: {
         width: '1200px',
+        minWidth: '1240px',
         height: '100vh',
         display: 'flex',
         backgroundColor: '#030303',
@@ -101,6 +103,7 @@ const styles = {
         transition: 'background-color 0.2s',
         cursor: 'pointer', // 커서 포인터 추가
     },
+
     cell: {
         padding: '20px',
         textAlign: 'center',

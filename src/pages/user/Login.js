@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Cookies from 'js-cookie';
 import {useAuth} from '../../context/AuthContext';
-import axios from 'axios'; // axios 임포트
+import axios from 'axios';
 import './Home.css';
 
 const Login = () => {
