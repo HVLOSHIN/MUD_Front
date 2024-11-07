@@ -142,7 +142,7 @@ export const AuthProvider = ({ children }) => {
     }, [isLoggedOut]);
 
     return (
-        <AuthContext.Provider value={{ accessToken, login, logout, axiosInstance }}>
+        <AuthContext.Provider value={{ accessToken, login, logout, axiosInstance, whitelistPaths , location }}>
             {children}
         </AuthContext.Provider>
     );
