@@ -1,13 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
 import './Dashboard.css';
 import { useAuth } from "../../context/AuthContext";
-import {UserContext} from "../../context/UserContext";
+import {ActionPointContext} from "../../context/ActionPointContext";
 import Cookies from "js-cookie";
 
 
 const Dashboard = () => {
     const { axiosInstance } = useAuth();
-    const {currentActionPoints} = useContext(UserContext);
+    const {currentActionPoints} = useContext(ActionPointContext);
 
     const [data, setData] = useState(null);
 

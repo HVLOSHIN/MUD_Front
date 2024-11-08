@@ -10,7 +10,7 @@ export const useMastery = () => {
 
 // 직업 및 스킬 상태가 유효한지 검사하는 유틸리티 함수
 const isValidStatus = (status) => {
-    const validStatuses = ['RUNNING', 'MASTER_RUNNING', 'MASTER'];
+    const validStatuses = ['RUNNING', 'MASTER_RUNNING','MASTER'];
     return validStatuses.includes(status);
 };
 
@@ -18,11 +18,12 @@ export const MasteryProvider = ({ children }) => {
     const { axiosInstance } = useAuth();
     const whitelistPaths = ['/stats', '/mastery', '/combat'];
     const [mastery, setMastery] = useState([]);
+    const [equippedMastery, setEquippedMastery] = useState([]);
+
     const [jobEffects, setJobEffects] = useState({});
     const [skillEffects, setSkillEffects] = useState({});
     const location = useLocation();
 
-    // API 호출하여 마스터 정보 불러오기
     useEffect(() => {
         if (!whitelistPaths.includes(location.pathname)) {
             return;
@@ -31,8 +32,15 @@ export const MasteryProvider = ({ children }) => {
         axiosInstance.get(`/api/user/${userId}/mastery`)
             .then((response) => {
                 setMastery(response.data);
+
+                const validMastery = response.data.filter(
+                    (skill) =>
+                        isValidStatus(skill.jobStatus)
+                );
+                setEquippedMastery(validMastery);
+
             })
-            .catch((error) => console.error('불러오기 데 실패했습니다:', error));
+            .catch((error) => console.error('불러오기 실패:', error));
     }, [axiosInstance, location.pathname]);
 
     // 직업 효과 종합
@@ -47,13 +55,12 @@ export const MasteryProvider = ({ children }) => {
             return acc;
         }, {});
         setJobEffects(newJobEffects);
-        console.log(newJobEffects);
-    }, [mastery]);
+    }, [mastery, setEquippedMastery]);
 
     // 스킬 효과 종합
     useEffect(() => {
-        const newSkillEffects = mastery.reduce((acc, masteryItem) => {
-            if (isValidStatus(masteryItem.jobStatus) && isValidStatus(masteryItem.passiveSkillStatus)) {
+        const newSkillEffects = equippedMastery.reduce((acc, masteryItem) => {
+            if (masteryItem.passiveSkillStatus === "RUNNING" || masteryItem.passiveSkillStatus === "MASTER_RUNNING") {
                 masteryItem.job.passiveSkills.effects.forEach(effect => {
                     const { effectType, value } = effect;
                     acc[effectType] = (acc[effectType] || 0) + value;
@@ -62,11 +69,11 @@ export const MasteryProvider = ({ children }) => {
             return acc;
         }, {});
         setSkillEffects(newSkillEffects);
-        console.log(newSkillEffects);
-    }, [mastery]);
+    }, [equippedMastery, setEquippedMastery]);
+
 
     return (
-        <MasteryContext.Provider value={{ mastery, jobEffects, skillEffects }}>
+        <MasteryContext.Provider value={{ mastery, setMastery, equippedMastery, jobEffects, skillEffects, setEquippedMastery }}>
             {children}
         </MasteryContext.Provider>
     );

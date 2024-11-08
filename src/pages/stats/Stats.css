@@ -3,6 +3,7 @@
 .stats-dashboard-container {
     max-width: 1200px;
     margin: 0 auto;
+    min-height: 100vh;
     padding: 20px;
     background-color: #000000;
     color: #eee;
@@ -45,6 +46,7 @@
 .stats-table td {
     padding: 15px 12px;
     text-align: center;
+    font-weight: bold;
 }
 
 .stats-table th {
@@ -74,6 +76,10 @@
     color: red;    /* 0보다 작은 경우 빨간색 */
 }
 
+/*.stats-table td:hover{*/
+/*    background-color: #3d3d3d;*/
+/*}*/
+
 
 .stats-log-table {
     width: 80%;
@@ -94,4 +100,16 @@
     content: '• ';
     color: #ffcc00;
     font-weight: bold;
+}
+
+
+.mastery-stats-section-title {
+    text-align: center;
+    font-size: 20px;
+}
+
+.mastery-stats-section-note{
+    text-align: center;
+    font-size: 15px;
+    color: #9a9a9a;
 }

@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useAuth} from '../../context/AuthContext';
 import {useEquipment} from "../../context/EquipmentContext";
-import EquipmentSlot from './Equipment-slot';
+import EquipmentSlot from './EquipmentSlot';
 import EquipmentStatsSummary from './EquipmentStatsSummary';
 import './Equipment.css';
 
@@ -36,7 +36,7 @@ const Equipment = () => {
 
     return (
         <div>
-            <EquipmentStatsSummary equippedItems={equippedItems}/>
+            <EquipmentStatsSummary/>
             <div className="equipment-container">
                 <EquipmentSlot
                     equipment={equipment}
