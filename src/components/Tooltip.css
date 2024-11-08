@@ -7,11 +7,12 @@
 .tooltip-text {
     visibility: hidden;
     width: 200px;
-    background-color: #212121;
+    background-color: #111111;
     color: #fff;
     text-align: center;
+    border: 1px solid #ffffff;
     border-radius: 5px;
-    padding: 10px;
+    padding: 20px 10px;
     position: absolute;
     z-index: 1;
     bottom: 100%; /* Tooltip above the text */
@@ -20,6 +21,7 @@
     margin-bottom: 10px;
     opacity: 0;
     transition: opacity 0.3s;
+
 }
 
 .tooltip-container:hover .tooltip-text {

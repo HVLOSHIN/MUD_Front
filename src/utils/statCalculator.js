@@ -57,3 +57,15 @@ export const calculateEnemyStats = (enemyData) => {
 
     return { HP, PA, MA, PD, MD, CT, CD, AV, DLY };
 };
+
+export const statsList = [
+    {label: "HP", key: "effectHP", stats: ["HP"]},
+    {label: "PA", key: "effectPA", stats: ["PA"]},
+    {label: "MA", key: "effectMA", stats: ["MA"]},
+    {label: "PD", key: "effectPD", stats: ["PD"]},
+    {label: "MD", key: "effectMD", stats: ["MD"]},
+    {label: "CT", key: "effectCT", stats: ["CT"]},
+    {label: "CD", key: "effectCD", stats: ["CD"]},
+    {label: "AV", key: "effectAV", stats: ["AV"]},
+    {label: "AR", key: "effectAR", stats: ["AR"]}
+];
