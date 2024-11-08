@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from "../../context/AuthContext";
+import {useEquipment} from "../../context/EquipmentContext";
+import {useMastery} from "../../context/MasteryContext";
 import { calculateUserStats, calculateEnemyStats } from '../../utils/statCalculator';
 import CombatTable from './CombatTable';
 import CombatLogic from "./CombatLogic"; // CombatTable 컴포넌트를 import
@@ -12,6 +14,8 @@ const Combat = () => {
     const [user, setUser] = useState([]);
     const [userCombat, setUserCombat] = useState(null);
     const [enemyCombat, setEnemyCombat] = useState(null);
+    const { equipTotalEffects } = useEquipment();
+    const {jobEffects, skillEffects} = useMastery();
     const { axiosInstance } = useAuth();
 
     useEffect(() => {
@@ -23,7 +27,7 @@ const Combat = () => {
                 ]);
                 setUser(userResponse.data);
                 setEnemy(enemyResponse.data);
-                setUserCombat(calculateUserStats(userResponse.data));
+                setUserCombat(calculateUserStats(userResponse.data, equipTotalEffects, skillEffects, jobEffects));
                 setEnemyCombat(calculateEnemyStats(enemyResponse.data));
             } catch (error) {
                 console.error('Failed to fetch combat data:', error);
