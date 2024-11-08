@@ -118,3 +118,21 @@
 .equipped-skill {
     background-color: #466545; /* 연한 초록색 배경 */
 }
+
+
+.master-equip-button{
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.master-equip-button:hover {
+    color: gold;
+}
+
+.master-equip-button:disabled{
+    color: transparent;
+}
+

@@ -1,12 +1,11 @@
 // Header.js
 import React from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Header.css';
-import {useAuth} from '../context/AuthContext';
-
+import { useAuth } from '../context/AuthContext';
 
 const Header = () => {
-    const {logout} = useAuth();
+    const { logout } = useAuth();
     const location = useLocation();
     const whitelistPaths = ['/', '/login', '/signup', '/logout'];
     const navigate = useNavigate();
@@ -15,29 +14,9 @@ const Header = () => {
         return null;
     }
 
-    function goDashboard() {
-        navigate('/dashboard');
-    }
-
-    function goStats() {
-        navigate('/stats');
-    }
-
-    function goFields() {
-        navigate('/field');
-    }
-
-    function goTraining() {
-        navigate('/training');
-    }
-
-    function goEquipment() {
-        navigate('/equipment');
-    }
-
-    function goMastery() {
-        navigate('/mastery');
-    }
+    const navigateTo = (path) => {
+        navigate(path);
+    };
 
     return (
         <div className="rpg-header-container">
@@ -45,38 +24,54 @@ const Header = () => {
                 <div className="navbar">
                     <ul>
                         <li>
-                            <button onClick={goDashboard}>홈</button>
+                            <button onClick={() => navigateTo('/dashboard')} className={location.pathname === '/dashboard' ? 'active' : ''}>
+                                MUD
+                            </button>
                         </li>
                     </ul>
                 </div>
                 <nav className="navbar">
                     <ul>
-
                         <li>
-                            <button onClick={goStats}>상세</button>
+                            <button onClick={() => navigateTo('/stats')} className={location.pathname === '/stats' ? 'active' : ''}>
+                                상세
+                            </button>
                         </li>
                         <li>
-                            <button onClick={goTraining}>훈련</button>
+                            <button onClick={() => navigateTo('/training')} className={location.pathname === '/training' ? 'active' : ''}>
+                                훈련
+                            </button>
                         </li>
                         <li>
-                            <button onClick={goMastery}>능력</button>
+                            <button onClick={() => navigateTo('/mastery')} className={location.pathname === '/mastery' ? 'active' : ''}>
+                                능력
+                            </button>
                         </li>
                         <li>
-                            <button onClick={goEquipment}>장비</button>
+                            <button onClick={() => navigateTo('/equipment')} className={location.pathname === '/equipment' ? 'active' : ''}>
+                                장비
+                            </button>
                         </li>
                         <li>
-                            <button onClick={goFields}>전투</button>
+                            <button onClick={() => navigateTo('/field')} className={location.pathname.startsWith('/field') ? 'active' : ''}>
+                                전투
+                            </button>
                         </li>
                         <li>
-                            <button onClick={goStats}>마을</button>
+                            <button onClick={() => navigateTo('/village')} className={location.pathname === '/village' ? 'active' : ''}>
+                                마을
+                            </button>
                         </li>
                         <li>
-                            <button onClick={goStats}>업적</button>
+                            <button onClick={() => navigateTo('/achievements')} className={location.pathname === '/achievements' ? 'active' : ''}>
+                                업적
+                            </button>
                         </li>
                         <li>
-                            <button onClick={goStats}>설정</button>
+                            <button onClick={() => navigateTo('/settings')} className={location.pathname === '/settings' ? 'active' : ''}>
+                                설정
+                            </button>
                         </li>
-
                     </ul>
                 </nav>
                 <div className="user-info">

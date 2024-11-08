@@ -37,6 +37,18 @@ const MasterySlot = () => {
         const currentStatus = skill[`${skillType}SkillStatus`];
         const updatedStatus = getUpdatedStatus(currentStatus);
         if (!updatedStatus) return; // 상태가 유효하지 않으면 아무 작업도 하지 않음
+
+        if (updatedStatus === 'RUNNING' || updatedStatus === 'MASTER_RUNNING') {
+            const addedAP = skill.job[`${skillType}Skills`].requiredAP;
+            const totalAP = calculateTotalAP() + addedAP;
+
+            // 최대 AP 초과 시 장착을 차단
+            if (totalAP > stats.ap) {
+                alert("최대 AP를 초과할 수 없습니다.");
+                return;
+            }
+        }
+
         const updatedSkills = selectedSkills.map((s) =>
             s.jobId === skill.jobId ? { ...s, [`${skillType}SkillStatus`]: updatedStatus } : s
         );
@@ -101,7 +113,6 @@ const MasterySlot = () => {
         }, 0);
     };
 
-    // 스킬 행 렌더링 함수
     const renderSkillRow = (skill, skillType) => {
         const skillData = skill.job[`${skillType}Skills`];
         if (!skillData) return null;
@@ -110,6 +121,9 @@ const MasterySlot = () => {
         const masteryEXP = skill[`${skillType}SkillMasteryEXP`];
         const masteryText = masteryEXP >= skillData.mastery ? "Master" : `${masteryEXP}/${skillData.mastery}`;
         const skillName = skillData.name;
+
+        // 장착 시 추가될 AP가 최대 AP를 초과하는지 확인하여 버튼 비활성화
+        const willExceedAP = !isEquipped && (calculateTotalAP() + skillData.requiredAP > stats.ap);
 
         return (
             <tr key={`${skill.jobId}-${skillType}`} className={isEquipped ? 'equipped-skill' : ''}>
@@ -120,13 +134,14 @@ const MasterySlot = () => {
                 <td>{skillData.chance ? `${skillData.chance}%` : '-'}</td>
                 <td>{skillData.description}</td>
                 <td>
-                    <button onClick={() => toggleSkill(skill, skillType)}>
+                    <button className="master-equip-button" onClick={() => toggleSkill(skill, skillType)} disabled={willExceedAP}>
                         {isEquipped ? '탈착' : '장착'}
                     </button>
                 </td>
             </tr>
         );
     };
+
 
     return (
         <div className="mastery-container">
@@ -139,7 +154,7 @@ const MasterySlot = () => {
                     <th>숙련도</th>
                     <th>발동률</th>
                     <th>설명</th>
-                    <th>장착/탈착</th>
+                    <th>장착</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -152,7 +167,8 @@ const MasterySlot = () => {
                 </tbody>
             </table>
             <div>
-                <h4 className="stats-section-title">AP: {calculateTotalAP()} / {stats.ap}</h4>
+                <h4 className="mastery-stats-section-title">AP : {calculateTotalAP()} / {stats.ap}</h4>
+                <h6 className="mastery-stats-section-note" > AP는 도전과제를 달성하면 올릴 수 있습니다.</h6>
             </div>
         </div>
     );

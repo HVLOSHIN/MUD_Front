@@ -1,7 +1,7 @@
 import React from 'react';
 import {useAuth} from '../../context/AuthContext';
 import {useEquipment} from "../../context/EquipmentContext";
-import EquipmentSlot from './Equipment-slot';
+import EquipmentSlot from './EquipmentSlot';
 import EquipmentStatsSummary from './EquipmentStatsSummary';
 import './Equipment.css';
 
