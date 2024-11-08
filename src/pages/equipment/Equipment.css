@@ -7,7 +7,6 @@
     /*border: 1px solid #ccc;*/
     padding: 20px;
     display: flex;
-
 }
 .equipment-stats-summary{
     width: 1200px;
@@ -106,4 +105,16 @@
 .common {
     background-color: #bfbfbf;
     color: #333;
+}
+
+
+
+.mastery-container{
+    width: 100%;
+    padding: 20px;
+
+}
+
+.equipped-skill {
+    background-color: #466545; /* 연한 초록색 배경 */
 }

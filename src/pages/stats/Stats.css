@@ -45,6 +45,7 @@
 .stats-table td {
     padding: 15px 12px;
     text-align: center;
+    font-weight: bold;
 }
 
 .stats-table th {
@@ -74,6 +75,10 @@
     color: red;    /* 0보다 작은 경우 빨간색 */
 }
 
+/*.stats-table td:hover{*/
+/*    background-color: #3d3d3d;*/
+/*}*/
+
 
 .stats-log-table {
     width: 80%;
@@ -95,3 +100,4 @@
     color: #ffcc00;
     font-weight: bold;
 }
+

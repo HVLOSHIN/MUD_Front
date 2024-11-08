@@ -11,6 +11,7 @@ import FieldDetail from "../pages/field/FieldDetail";
 import Combat from "../pages/combat/Combat";
 import Training from "../pages/training/Training";
 import Equipment from "../pages/equipment/Equipment";
+import Mastery from "../pages/mastery/Mastery";
 
 
 function AppRouter() {
@@ -29,7 +30,7 @@ function AppRouter() {
             <Route path="/combat" element={<Combat/>}/>
             <Route path="/training" element={<Training/>}/>
             <Route path="/equipment" element={<Equipment/>}/>
-
+            <Route path="/mastery" element={<Mastery/>}/>
 
 
         </Routes>

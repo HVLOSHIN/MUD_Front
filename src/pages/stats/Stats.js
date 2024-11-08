@@ -52,7 +52,7 @@ const Stats = () => {
                 const equipmentStat = equipTotalEffects[stat] || 0;
                 const jobStat = jobEffects[stat] || 0;
                 const skillStat = skillEffects[stat] || 0;
-                return `장비 : ${equipmentStat} 스킬 : ${jobStat} 직업 : ${skillStat}`;
+                return `장비 : ${equipmentStat} 스킬 : ${skillStat} 직업 : ${jobStat}`;
             })
             .join(" ");
         return <Tooltip text={tooltipText}>{label}</Tooltip>;

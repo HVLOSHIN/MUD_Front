@@ -1,8 +1,8 @@
 import React, {createContext, useState, useEffect} from 'react';
 import {useAuth} from "./AuthContext";
 
-export const UserContext = createContext();
-export const UserProvider = ({children}) => {
+export const ActionPointContext = createContext();
+export const ActionPointProvider = ({children}) => {
     const {axiosInstance, whitelistPaths, location} = useAuth();
     const INTERVAL = 10 * 1000;
     const [currentActionPoints, setCurrentActionPoints] = useState();
@@ -53,8 +53,8 @@ export const UserProvider = ({children}) => {
     }, [axiosInstance, location, currentActionPoints]);
 
     return (
-        <UserContext.Provider value={{currentActionPoints}}>
+        <ActionPointContext.Provider value={{currentActionPoints}}>
             {children}
-        </UserContext.Provider>
+        </ActionPointContext.Provider>
     );
 };
