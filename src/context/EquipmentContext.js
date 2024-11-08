@@ -48,7 +48,7 @@ export const EquipmentProvider = ({ children }) => {
         }, {});
 
         setEquipTotalEffects(newTotalEffects);
-    }, [equippedItems, location.pathname, equippedItems]);
+    }, [equippedItems]);
 
     const gradeColors = {
         RUBBISH: "#949494",

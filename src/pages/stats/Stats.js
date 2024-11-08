@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './Stats.css';
 import {useAuth} from "../../context/AuthContext";
 import {useEquipment} from "../../context/EquipmentContext";
+import {useMastery} from "../../context/MasteryContext";
 import {calculateUserStats, statsList} from '../../utils/statCalculator';
 import Cookies from "js-cookie";
 import Tooltip from '../../components/Tooltip';
@@ -10,6 +11,7 @@ import StatsSection from "./StatsSection";
 const Stats = () => {
     const {axiosInstance} = useAuth();
     const {equippedItems, gradeColors, GRADE_NAMES, slotGroups, equipTotalEffects} = useEquipment();
+    const {jobEffects, skillEffects} = useMastery();
     const [data, setData] = useState(null);
     const [totalEffects, setTotalEffects] = useState(null);
 
@@ -47,10 +49,9 @@ const Stats = () => {
     const renderTooltip = (label, stats) => {
         const tooltipText = stats
             .map(stat => {
-                // TODO
                 const equipmentStat = equipTotalEffects[stat] || 0;
-                const jobStat = data.combat.jobStats[stat] || 0;
-                const skillStat = data.combat.skillStats[stat] || 0;
+                const jobStat = jobEffects[stat] || 0;
+                const skillStat = skillEffects[stat] || 0;
                 return `장비 : ${equipmentStat} 스킬 : ${jobStat} 직업 : ${skillStat}`;
             })
             .join(" ");

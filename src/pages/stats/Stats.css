@@ -43,12 +43,13 @@
 
 .stats-table th,
 .stats-table td {
-    padding: 8px 12px;
+    padding: 15px 12px;
     text-align: center;
 }
 
 .stats-table th {
-    background-color: #444;
+    background-color: #2e2e2e;
+    padding: 15px;
     color: #ffffff;
     font-weight: bold;
 }
@@ -92,4 +93,5 @@
 .stats-logs-list li:before {
     content: '• ';
     color: #ffcc00;
+    font-weight: bold;
 }

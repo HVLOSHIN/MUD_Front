@@ -47,7 +47,6 @@ const StatsSection = ({ totalEffects }) => {
             </table>
         </section>
     );
-
 };
 
 export default StatsSection;
