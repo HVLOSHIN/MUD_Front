@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './Stats.css';
 import {useAuth} from "../../context/AuthContext";
 import {useEquipment} from "../../context/EquipmentContext";
-import {calculateUserStats} from '../../utils/statCalculator';
+import {calculateUserStats, statsList} from '../../utils/statCalculator';
 import Cookies from "js-cookie";
 import Tooltip from '../../components/Tooltip';
 import StatsSection from "./StatsSection";
@@ -38,18 +38,6 @@ const Stats = () => {
         return effects.map(effect => `${effect.effectType}: ${effect.value}`).join(", ");
     };
 
-    const statsList = [
-        {label: "HP", key: "effectHP", stats: ["HP"]},
-        {label: "PA", key: "effectPA", stats: ["PA"]},
-        {label: "MA", key: "effectMA", stats: ["MA"]},
-        {label: "PD", key: "effectPD", stats: ["PD"]},
-        {label: "MD", key: "effectMD", stats: ["MD"]},
-        {label: "CT", key: "effectCT", stats: ["CT"]},
-        {label: "CD", key: "effectCD", stats: ["CD"]},
-        {label: "AV", key: "effectAV", stats: ["AV"]},
-        {label: "AR", key: "effectAR", stats: ["AR"]}
-    ];
-
     const getStatClass = (statValue) => {
         if (statValue > 0) return "stats-positive";
         if (statValue < 0) return "stats-negative";
@@ -74,10 +62,9 @@ const Stats = () => {
 
     return (
         <div className="stats-dashboard-container">
-            <h2 className="stats-title"> {data.username}</h2>
-
+            <p className="stats-title">마우스를 올려보면 더 많은 정보를 확인하실 수 있습니다.</p>
             <section className="stats-section">
-                <h3 className="stats-section-title">개요</h3>
+                <h3 className="stats-section-title">{data.username}</h3>
                 <table className="stats-table">
                     <tbody>
                     <tr>
@@ -85,14 +72,10 @@ const Stats = () => {
                         <td><Tooltip text={currentMastery.job.description}>
                             {currentMastery.job.name}
                         </Tooltip></td>
-                        <th>생명력</th>
-                        <td><Tooltip text="기본 HP">
-                            {totalEffects.HP}
-                        </Tooltip></td>
+                        <th>레벨</th>
+                        <td>{data.userStats.level}</td>
                         <th>소지금</th>
-                        <td><Tooltip text="gold">
-                            {data.userStats.gold}
-                        </Tooltip></td>
+                        <td>{data.userStats.gold}</td>
                     </tr>
                     <tr>
                         <th>근력</th>
@@ -111,18 +94,18 @@ const Stats = () => {
             <section className="stats-section">
                 <h3 className="stats-section-title">효과</h3>
                 <table className="stats-table">
+                    <thead>
+                    <tr>
+                        {statsList.map((stat) => (
+                            <th key={`${stat.label}-header`}>{stat.label}</th>))}
+                    </tr>
+                    </thead>
                     <tbody>
-                    {statsList.map((stat, index) => (
-                        <tr key={stat.label}>
-                            <th>{stat.label}</th>
-                            <td className={getStatClass(totalEffects[stat.key])}>
-                                {renderTooltip(
-                                    totalEffects[stat.key],
-                                    stat.stats
-                                )}
-                            </td>
-                        </tr>
-                    ))}
+                    <tr>
+                        {statsList.map((stat) => (
+                            <td key={`${stat.label}-value`} className={getStatClass(totalEffects[stat.key])}>
+                                {renderTooltip(totalEffects[stat.key], stat.stats)}</td>))}
+                    </tr>
                     </tbody>
                 </table>
             </section>
@@ -167,11 +150,14 @@ const Stats = () => {
 
             <section className="stats-section">
                 <h3 className="stats-section-title">최근 기록</h3>
+                <table className="stats-log-table">
                 <ul className="stats-logs-list">
                     {data.logs.map((log, index) => (
+
                         <li key={index}>Login {log.ip} 에서 접속 {new Date(log.time).toLocaleString()}</li>
                     ))}
                 </ul>
+                </table>
             </section>
         </div>
     );

@@ -69,8 +69,8 @@ export const EquipmentProvider = ({ children }) => {
     };
 
     const slotNames = {
-        "TWO_HANDED_WEAPON": "양손 무기",
-        "ONE_HANDED_WEAPON": "한손 무기",
+        "TWO_HANDED_WEAPON": "양손",
+        "ONE_HANDED_WEAPON": "한손",
         "OFFHAND_WEAPON": "보조",
         "HEAD": "머리",
         "BODY": "갑옷",

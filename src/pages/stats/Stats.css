@@ -4,7 +4,7 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #222;
+    background-color: #000000;
     color: #eee;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -13,39 +13,43 @@
 
 .stats-title {
     text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 16px;
+    margin-bottom: 10px;
 }
 
 .stats-section {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     padding: 15px;
-    background-color: #333;
+    background-color: #000000;
     border-radius: 8px;
 }
 
 .stats-section-title {
+    text-align: center;
     font-size: 20px;
     color: #ffcc00;
     margin-bottom: 10px;
 }
 
 .stats-table {
-    width: 100%;
+    width: 80%;
     border-collapse: collapse;
-    margin-top: 10px;
+    margin: 10px auto;
+    border: 1px solid #ffffff;
+    border-radius: 10px;
 }
+
+
 
 .stats-table th,
 .stats-table td {
     padding: 8px 12px;
-    border: 1px solid #444;
     text-align: center;
 }
 
 .stats-table th {
     background-color: #444;
-    color: #ffcc00;
+    color: #ffffff;
     font-weight: bold;
 }
 
@@ -61,11 +65,28 @@
     color: red;
 }
 
+.stats-table td.positive {
+    color: green;  /* 0보다 큰 경우 초록색 */
+}
+
+.stats-table td.negative {
+    color: red;    /* 0보다 작은 경우 빨간색 */
+}
+
+
+.stats-log-table {
+    width: 80%;
+    border-collapse: collapse;
+    margin: 10px auto;
+    border: 1px solid #ffffff;
+    border-radius: 10px;
+}
 
 .stats-logs-list {
     padding: 0;
     list-style-type: none;
     color: #ccc;
+    margin-left: 25px;
 }
 
 .stats-logs-list li:before {

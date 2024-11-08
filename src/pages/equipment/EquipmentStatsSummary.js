@@ -1,28 +1,37 @@
 import React from 'react';
 import './Equipment.css';
 import { useEquipment } from "../../context/EquipmentContext";
+import {statsList} from "../../utils/statCalculator";
 
 const EquipmentStatsSummary = () => {
     const { equipTotalEffects } = useEquipment();
 
-    if (!equipTotalEffects || Object.keys(equipTotalEffects).length === 0) {
-        return (
-            <div className="equipment-stats-summary">
-                <p>장착된 장비가 없습니다.</p>
-            </div>
-        );
-    }
+    const getStatClass = (value) => {
+        if (value > 0) return "positive";    // 초록색 클래스
+        if (value < 0) return "negative";    // 빨간색 클래스
+        return "";                           // 0인 경우 기본 색상
+    };
 
     return (
         <div className="equipment-stats-summary">
-            <h2>장착한 장비의 스탯 합계</h2>
-            <ul>
-                {Object.entries(equipTotalEffects).map(([effectType, totalValue]) => (
-                    <li key={effectType}>
-                        {effectType}: {totalValue.toFixed(1)}
-                    </li>
-                ))}
-            </ul>
+            <table className="stats-table">
+                <thead>
+                <tr>
+                    {statsList.map((stat) => (
+                        <th key={`${stat.key}-header`}>{stat.label}</th>
+                    ))}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {statsList.map((stat) => (
+                        <td key={`${stat.key}-value`} className={getStatClass(equipTotalEffects[stat.label])}>
+                            {(equipTotalEffects[stat.label] || 0).toFixed(1)}
+                        </td>
+                    ))}
+                </tr>
+                </tbody>
+            </table>
         </div>
     );
 };

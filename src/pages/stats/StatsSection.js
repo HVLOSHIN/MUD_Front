@@ -26,24 +26,28 @@ const StatsSection = ({ totalEffects }) => {
         <section className="stats-section">
             <h3 className="stats-section-title">전투 능력치</h3>
             <table className="stats-table">
+                <thead>
+                <tr>
+                    {stats.map((stat) => (
+                        <th key={`${stat.label}-header`}>{stat.label}</th>
+                    ))}
+                </tr>
+                </thead>
                 <tbody>
-                {stats.map((stat, index) => {
-                    const rowIndex = Math.floor(index / 4);
-                    const isEvenRow = rowIndex % 2 === 0;
-
-                    return (
-                        <tr key={stat.label} className={isEvenRow ? "even-row" : "odd-row"}>
-                            <th>{stat.label}</th>
-                            <td>
-                                {stat.gap !== null ? renderTooltip(stat.base, stat.gap, stat.final) : stat.final}
-                            </td>
-                        </tr>
-                    );
-                })}
+                <tr>
+                    {stats.map((stat, index) => (
+                        <td key={`${stat.label}-value`}>
+                            {stat.gap !== null
+                                ? renderTooltip(stat.base, stat.gap, stat.final)
+                                : stat.final}
+                        </td>
+                    ))}
+                </tr>
                 </tbody>
             </table>
         </section>
     );
+
 };
 
 export default StatsSection;
