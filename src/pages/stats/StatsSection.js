@@ -1,19 +1,21 @@
 import React from "react";
 import Tooltip from '../../components/Tooltip';
+import { useStat } from "../../context/StatContext";
 
 const StatsSection = ({ totalEffects }) => {
 
-
+    const { stats } = useStat();
     const renderTooltip = (baseValue, gapValue, finalValue) => (
         <Tooltip text={`${baseValue} + ${gapValue}`}>
             {finalValue}
         </Tooltip>
     );
 
-    const stats = [
-        { label: "체력", gap: totalEffects.effectHP, base: totalEffects.HP - totalEffects.effectHP , final: totalEffects.HP },
-        { label: "물리공격력", gap: totalEffects.effectPA, base: totalEffects.PA - totalEffects.effectPA , final: totalEffects.PA },
-        { label: "마법공격력", gap: totalEffects.effectMA, base: totalEffects.MA - totalEffects.effectMA , final: totalEffects.MA },
+    const calcStats = [
+        { label: "체력", gap: (totalEffects.HP - stats.hp).toFixed(1) , base: stats.hp , final: totalEffects.HP },
+        { label: "물리공격력", gap: (totalEffects.PA - stats.strength).toFixed(1), base: stats.strength , final: totalEffects.PA },
+        { label: "마법공격력", gap: (totalEffects.MA - stats.intelligence).toFixed(1), base: stats.intelligence , final: totalEffects.MA },
+
         { label: "물리방어력", gap: totalEffects.effectPD, base: totalEffects.PD - totalEffects.effectPD , final: totalEffects.PD },
         { label: "마법방어력", gap: totalEffects.effectMD, base: totalEffects.MD - totalEffects.effectMD , final: totalEffects.MD },
         { label: "치명타율", gap: totalEffects.effectCT, base: totalEffects.CT - totalEffects.effectCT , final: totalEffects.CT},
@@ -28,14 +30,14 @@ const StatsSection = ({ totalEffects }) => {
             <table className="stats-table">
                 <thead>
                 <tr>
-                    {stats.map((stat) => (
+                    {calcStats.map((stat) => (
                         <th key={`${stat.label}-header`}>{stat.label}</th>
                     ))}
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    {stats.map((stat, index) => (
+                    {calcStats.map((stat, index) => (
                         <td key={`${stat.label}-value`}>
                             {stat.gap !== null
                                 ? renderTooltip(stat.base, stat.gap, stat.final)

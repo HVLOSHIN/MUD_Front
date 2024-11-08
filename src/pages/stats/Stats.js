@@ -10,7 +10,7 @@ import StatsSection from "./StatsSection";
 
 const Stats = () => {
     const {axiosInstance} = useAuth();
-    const {equippedItems, gradeColors, GRADE_NAMES, slotGroups, equipTotalEffects} = useEquipment();
+    const {equippedItems, gradeColors, GRADE_NAMES, slotGroups, equipTotalEffects, gradeMultipliers} = useEquipment();
     const {jobEffects, skillEffects} = useMastery();
     const [data, setData] = useState(null);
     const [totalEffects, setTotalEffects] = useState(null);
@@ -19,7 +19,7 @@ const Stats = () => {
         const userId = Cookies.get('userId');
         axiosInstance.get(`/api/user/${userId}`)
             .then((response) => {
-                setTotalEffects(calculateUserStats(response.data));
+                setTotalEffects(calculateUserStats(response.data, equipTotalEffects, skillEffects, jobEffects ));
                 const sortedData = {
                     ...response.data,
                     logs: response.data.logs.sort((a, b) => new Date(b.time) - new Date(a.time)),
@@ -33,11 +33,15 @@ const Stats = () => {
 
     const currentMastery = data?.mastery.find((job) => job.jobStatus === "RUNNING" || "MASTER_RUNNING");
 
-    const formatItemEffects = (effects) => {
-        if (effects == null) {
-            return
+    const formatItemEffects = (item) => {
+        if (item.effects == null) {
+            return;
         }
-        return effects.map(effect => `${effect.effectType}: ${effect.value}`).join(", ");
+        const multiplier = gradeMultipliers[item.grade] || 1; // 등급에 맞는 배율 가져오기 (기본값: 1)
+
+        return item.effects
+            .map(effect => `${effect.effectType}: ${(effect.value * multiplier).toFixed(1)}`) // 배율 적용
+            .join(", ");
     };
 
     const getStatClass = (statValue) => {
@@ -133,7 +137,7 @@ const Stats = () => {
                                                 {GRADE_NAMES[equippedItem.grade]}<br/> {/* 한글 등급 이름 */}
                                                 효과: <span
                                                 dangerouslySetInnerHTML={{
-                                                    __html: formatItemEffects(equippedItem.effects)
+                                                    __html: formatItemEffects(equippedItem)
                                                 }}/>
                                             </span>}>
                                 <span style={{color: gradeColors[equippedItem.grade]}}>
