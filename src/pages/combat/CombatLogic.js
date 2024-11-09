@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './Combat.css';
-import { useAuth } from "../../context/AuthContext";
+import {useAuth} from "../../context/AuthContext";
 
-const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
+const CombatLogic = ({user, enemy, userCombat, enemyCombat, activeSkills}) => {
     const [logContainers, setLogContainers] = useState([]);
     const [victoryMessage, setVictoryMessage] = useState('');
-    const { axiosInstance } = useAuth();
+    const {axiosInstance} = useAuth();
 
     const userMaxHP = parseInt(userCombat.HP);
     const enemyMaxHP = parseInt(enemyCombat.HP);
@@ -16,12 +16,6 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
     const TIME = 1000 * 60;
     let totalDamage = 0;
     let maxDamage = 0;
-
-    const userSkills = user.mastery
-        .filter(mastery => (mastery.jobStatus === "RUNNING" || mastery.jobStatus === "MASTER_RUNNING" || mastery.jobStatus === "MASTER") && mastery.activeSkillStatus === "RUNNING")
-        .filter(mastery => mastery.activeSkillStatus === "RUNNING" || mastery.activeSkillStatus === "MASTER_RUNNING")
-        .flatMap(mastery => mastery.job.activeSkills)
-        .sort((a, b) => b.priority - a.priority);
 
     const calculateDamage = (base, defense, isMA) => {
         const rawDamage = Math.floor(Math.random() * (base * 0.4)) + (base * 0.8);
@@ -41,17 +35,17 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
     });
 
     const updateHealth = (userId, newHp) => {
-        axiosInstance.put('/api/user/hp', { userId, newHp })
+        axiosInstance.put('/api/user/hp', {userId, newHp})
             .catch(error => console.error('HP 업데이트 실패 : ', error));
     };
 
     const updateEXP = (userId, quantity) => {
-        axiosInstance.put('/api/user/exp', { userId, quantity })
+        axiosInstance.put('/api/user/exp', {userId, quantity})
             .catch(error => console.error('EXP 업데이트 실패 : ', error));
     }
 
     const updateAchieve = (userId, totalDamage, maxDamage, killCount) => {
-        axiosInstance.put('/api/user/achieve', { userId, totalDamage, maxDamage, killCount })
+        axiosInstance.put('/api/user/achieve', {userId, totalDamage, maxDamage, killCount})
             .catch(error => console.error('Achieve 업데이트 실패 : ', error));
     }
 
@@ -87,7 +81,7 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
             let skillActivated = false;
             let critical = false;
 
-            for (const skill of userSkills) {
+            for (const skill of activeSkills) {
                 if (Math.random() * 100 < skill.chance) {
                     actName = skill.name;
                     const effect = skill.effects.find(effect => effect.effectType === 'PA' || effect.effectType === 'MA');
@@ -114,10 +108,9 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
 
             // 업적용
             totalDamage += finalDamage;
-            if(maxDamage < finalDamage){
+            if (maxDamage < finalDamage) {
                 maxDamage = finalDamage;
             }
-
 
 
             combatLog.push(createCombatLogEntry(userTime, 'user', user.username, actName, finalDamage, userCurrentHp, enemyCurrentHp, critical));
@@ -172,17 +165,17 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
                             {i === 0 && (
                                 <div className="health-status">
                                     <div className="user-health">
-                                        {entry.user} <br />
+                                        {entry.user} <br/>
                                         {entry.userDisplay} / {userMaxHP}
                                     </div>
                                     <div className="enemy-health">
-                                        {enemy.name} <br />
+                                        {enemy.name} <br/>
                                         {entry.enemyDisplay} / {enemyMaxHP}
                                     </div>
                                 </div>
                             )}
                             <span className="combat-log-timestamp">{`${(entry.timestamp / 1000).toFixed(1)}s`}</span>
-                            <br />
+                            <br/>
                             <span>
                                 <span className="name">{entry.name}의 </span>
                                 <span className="act-name">{entry.actName}! </span>
@@ -195,7 +188,7 @@ const CombatLogic = ({ user, enemy, userCombat, enemyCombat }) => {
                 </div>
             ))}
             <div className="victory-message">
-                {victoryMessage} <br />
+                {victoryMessage} <br/>
             </div>
         </div>
     );

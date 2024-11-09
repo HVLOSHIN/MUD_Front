@@ -15,7 +15,7 @@ const Combat = () => {
     const [userCombat, setUserCombat] = useState(null);
     const [enemyCombat, setEnemyCombat] = useState(null);
     const { equipTotalEffects } = useEquipment();
-    const {jobEffects, skillEffects} = useMastery();
+    const {jobEffects, skillEffects, activeSkills} = useMastery();
     const { axiosInstance } = useAuth();
 
     useEffect(() => {
@@ -45,7 +45,7 @@ const Combat = () => {
         </div>
             <div>
             {userCombat && enemyCombat && (
-                <CombatLogic user={user} enemy={enemy} userCombat={userCombat} enemyCombat={enemyCombat}/>)}
+                <CombatLogic user={user} enemy={enemy} userCombat={userCombat} enemyCombat={enemyCombat} activeSkills={activeSkills} />)}
             </div>
         </div>
     );
