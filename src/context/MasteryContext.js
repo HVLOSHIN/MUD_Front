@@ -8,7 +8,6 @@ export const useMastery = () => {
     return useContext(MasteryContext);
 };
 
-// 직업 및 스킬 상태가 유효한지 검사하는 유틸리티 함수
 const isValidStatus = (status) => {
     const validStatuses = ['RUNNING', 'MASTER_RUNNING','MASTER'];
     return validStatuses.includes(status);
@@ -19,10 +18,15 @@ export const MasteryProvider = ({ children }) => {
     const whitelistPaths = ['/stats', '/mastery', '/combat'];
     const [mastery, setMastery] = useState([]);
     const [equippedMastery, setEquippedMastery] = useState([]);
-
     const [jobEffects, setJobEffects] = useState({});
     const [skillEffects, setSkillEffects] = useState({});
     const location = useLocation();
+
+    const activeSkills =
+        equippedMastery
+            .filter(mastery => mastery.activeSkillStatus === "RUNNING" || mastery.activeSkillStatus === "MASTER_RUNNING")
+            .flatMap(mastery => mastery.job.activeSkills)
+            .sort((a, b) => b.priority - a.priority);
 
     useEffect(() => {
         if (!whitelistPaths.includes(location.pathname)) {
@@ -71,9 +75,8 @@ export const MasteryProvider = ({ children }) => {
         setSkillEffects(newSkillEffects);
     }, [equippedMastery, setEquippedMastery]);
 
-
     return (
-        <MasteryContext.Provider value={{ mastery, setMastery, equippedMastery, jobEffects, skillEffects, setEquippedMastery }}>
+        <MasteryContext.Provider value={{ mastery, setMastery, equippedMastery, jobEffects, skillEffects, setEquippedMastery, activeSkills }}>
             {children}
         </MasteryContext.Provider>
     );

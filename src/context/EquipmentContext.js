@@ -39,9 +39,11 @@ export const EquipmentProvider = ({ children }) => {
         const newTotalEffects = Object.values(equippedItems).reduce((acc, item) => {
             // item이 존재하고 item.effects가 배열인 경우만 처리
             if (item && Array.isArray(item.effects)) {
+                const multiplier = gradeMultipliers[item.grade] || 1;
+
                 item.effects.forEach(effect => {
                     const { effectType, value } = effect;
-                    acc[effectType] = (acc[effectType] || 0) + value;
+                    acc[effectType] = (acc[effectType] || 0) + value * multiplier;
                 });
             }
             return acc;
@@ -49,6 +51,25 @@ export const EquipmentProvider = ({ children }) => {
 
         setEquipTotalEffects(newTotalEffects);
     }, [equippedItems]);
+
+
+    const gradeMultipliers = {
+        RUBBISH: 0.8,
+        COMMON: 1.0,
+        RARE: 1.2,
+        EPIC: 1.5,
+        UNIQUE: 2.0,
+        LEGENDARY: 4.0
+    };
+
+    const gradeDropRate = {
+        RUBBISH: 25,
+        COMMON: 30,
+        RARE: 25,
+        EPIC: 15,
+        UNIQUE: 4,
+        LEGENDARY: 1
+    }
 
     const gradeColors = {
         RUBBISH: "#949494",
@@ -94,7 +115,7 @@ export const EquipmentProvider = ({ children }) => {
     };
 
     return (
-        <EquipmentContext.Provider value={{ equipment, equippedItems, equipTotalEffects, setEquipment, setEquippedItems, gradeColors, GRADE_NAMES, slotNames, slotGroups }}>
+        <EquipmentContext.Provider value={{ equipment, equippedItems, equipTotalEffects, setEquipment, setEquippedItems, gradeColors, GRADE_NAMES, slotNames, slotGroups, gradeMultipliers }}>
             {children}
         </EquipmentContext.Provider>
     );
