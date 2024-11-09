@@ -5,11 +5,11 @@ import {useEquipment} from "../../context/EquipmentContext";
 import {useMastery} from "../../context/MasteryContext";
 import { calculateUserStats, calculateEnemyStats } from '../../utils/statCalculator';
 import CombatTable from './CombatTable';
-import CombatLogic from "./CombatLogic"; // CombatTable 컴포넌트를 import
+import CombatLogic from "./CombatLogic";
 
 const Combat = () => {
     const location = useLocation();
-    const { userId, enemyId } = location.state || {};
+    const { userId, enemyId, combatCount } = location.state || {};
     const [enemy, setEnemy] = useState([]);
     const [user, setUser] = useState([]);
     const [userCombat, setUserCombat] = useState(null);
@@ -45,7 +45,7 @@ const Combat = () => {
         </div>
             <div>
             {userCombat && enemyCombat && (
-                <CombatLogic user={user} enemy={enemy} userCombat={userCombat} enemyCombat={enemyCombat} activeSkills={activeSkills} />)}
+                <CombatLogic user={user} enemy={enemy} userCombat={userCombat} enemyCombat={enemyCombat} activeSkills={activeSkills} combatCount={combatCount} />)}
             </div>
         </div>
     );

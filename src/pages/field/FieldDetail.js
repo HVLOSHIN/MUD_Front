@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 
 const FieldDetail = () => {
     const [enemies, setEnemies] = useState([]);
-    const [battleCount, setBattleCount] = useState(1);
+    const [combatCount, setCombatCount] = useState(1);
     const [selectedEnemy, setSelectedEnemy] = useState(null); // 선택된 적 상태
     const navigate = useNavigate();
     const { fieldId } = useParams();
@@ -29,7 +29,7 @@ const FieldDetail = () => {
             return;
         }
 
-        if (battleCount <= 0) {
+        if (combatCount <= 0) {
             alert("전투 횟수는 1 이상이어야 합니다.");
             return;
         }
@@ -38,7 +38,7 @@ const FieldDetail = () => {
         const enemyId = selectedEnemy;
 
         navigate(`/combat`, {
-            state: { userId, enemyId, battleCount }
+            state: { userId, enemyId,  combatCount }
         });
 
 
@@ -76,8 +76,8 @@ const FieldDetail = () => {
                 <input
                     type="number"
                     id="battleCount"
-                    value={battleCount}
-                    onChange={(e) => setBattleCount(Number(e.target.value))}
+                    value={combatCount}
+                    onChange={(e) => setCombatCount(Number(e.target.value))}
                     min="1"
                     style={styles.input}
                 />
